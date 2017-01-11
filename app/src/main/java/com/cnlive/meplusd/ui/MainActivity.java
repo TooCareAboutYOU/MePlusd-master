@@ -1,7 +1,9 @@
 package com.cnlive.meplusd.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.cnlive.meplusd.R;
@@ -28,20 +30,19 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 ToastUtils.CustomToast(MainActivity.this,"快点返回");
+                startActivity(new Intent(MainActivity.this,AboutActivity.class));
             }
         });
     }
 
-
-
-
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        ExitActivityToTask();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //调用双击退出函数
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            exitBy2Click();
+        }
+        return false;
     }
-
 
     @Override
     protected void AddActivityToTask() {

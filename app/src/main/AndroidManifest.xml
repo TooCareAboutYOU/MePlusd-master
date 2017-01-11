@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Splash">
 
-        <!--引导页-->
+        <!-- 引导页 -->
         <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,22 +31,25 @@
             </intent-filter>
         </activity>
 
-       <!--首页-->
+        <!-- 首页 -->
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransparentActicity.FullScreen" >
-
+            android:theme="@style/AppTheme.TransparentActicity.FullScreen">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
 
-                <data android:scheme="MePlus" />
+                <data android:scheme="MePlus"/>
             </intent-filter>
-
+        </activity>
+        <activity
+            android:name=".ui.AboutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.TransparentActicity.FullScreen">
         </activity>
     </application>
 

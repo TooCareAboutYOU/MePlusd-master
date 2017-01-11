@@ -2,10 +2,10 @@ package com.cnlive.meplusd.ui.base;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.cnlive.meplusd.utils.ActivityManageUtil;
 import com.cnlive.meplusd.utils.CrashHandlerUtils;
+import com.cnlive.meplusd.utils.ToastUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,7 +13,6 @@ import java.util.TimerTask;
 import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends Activity {
-
 
 
     @Override
@@ -36,8 +35,6 @@ public abstract class BaseActivity extends Activity {
     }
 
     protected abstract void AddActivityToTask();
-
-    public void ExitActivityToTask(){ ActivityManageUtil.getInstance().finishActivity(this); }
 
     @Override
     protected void onResume() {
@@ -64,7 +61,7 @@ public abstract class BaseActivity extends Activity {
         Timer tExit = null;
         if (isExit == false) {
             isExit = true; // 准备退出
-            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            ToastUtils.CustomToast(this,"再按一次退出程序");
             tExit = new Timer();
             tExit.schedule(new TimerTask() {
                 @Override
@@ -75,6 +72,7 @@ public abstract class BaseActivity extends Activity {
 
         } else {
             ActivityManageUtil.getInstance().finishAllActivity();
+            finish();
             System.exit(0);
         }
     }

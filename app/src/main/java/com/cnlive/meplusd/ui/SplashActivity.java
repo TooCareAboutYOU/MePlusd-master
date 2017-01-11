@@ -1,10 +1,8 @@
 package com.cnlive.meplusd.ui;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,6 +11,7 @@ import com.cnlive.meplusd.R;
 import com.cnlive.meplusd.api.UserAPI;
 import com.cnlive.meplusd.model.ErrorMessage;
 import com.cnlive.meplusd.ui.base.BaseActivity;
+import com.cnlive.meplusd.utils.ActivityJumpUtils;
 import com.cnlive.meplusd.utils.ActivityManageUtil;
 import com.cnlive.meplusd.utils.RestAdapterUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -41,7 +40,7 @@ public class SplashActivity extends BaseActivity {
         mSimpleImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                ActivityJumpUtils.JumpCommonActivity(SplashActivity.this,MainActivity.class);
             }
         });
 
@@ -68,10 +67,10 @@ public class SplashActivity extends BaseActivity {
     }
 
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //调用双击退出函数
-        if(keyCode == KeyEvent.KEYCODE_BACK) { exitBy2Click(); }
-        return false;
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        //调用双击退出函数
+//        if(keyCode == KeyEvent.KEYCODE_BACK) { exitBy2Click(); }
+//        return false;
+//    }
 }
