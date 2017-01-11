@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,6 +6,26 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:listDivider">@drawable/theme_listdivide</item>
+    </style>
+
+    <!--开机页、引导页-->
+    <style name="AppTheme.Splash" parent="AppTheme" >
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
+        <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/image_splash</item>
+        <item name="android:fitsSystemWindows">false</item>
+    </style>
+
+    <!--普通页-->
+    <style name="AppTheme.TransparentActicity.FullScreen" parent="AppTheme" >
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">false</item>
+        <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@drawable/image_splash</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
 </resources>

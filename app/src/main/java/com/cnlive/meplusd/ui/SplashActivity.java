@@ -1,8 +1,10 @@
 package com.cnlive.meplusd.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.cnlive.meplusd.Config;
@@ -31,9 +33,16 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         mSimpleImage1.setImageURI(Uri.parse("http://yweb3.cnliveimg.com/img/cnlive/161121103649189_625.png"));
+
+        mSimpleImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SplashActivity.this,MainActivity.class));
+            }
+        });
 
         UserAPI userAPI = RestAdapterUtils.getRestAPI(Config.SJR_URL, UserAPI.class);
         userAPI.getInfo(new Callback<ErrorMessage>() {
