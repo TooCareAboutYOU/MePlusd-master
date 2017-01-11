@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.cnlive.meplusd.R;
 import com.cnlive.meplusd.ui.base.BaseActivity;
+import com.cnlive.meplusd.utils.ActivityJumpUtils;
 import com.cnlive.meplusd.utils.ActivityManageUtil;
 
 public class AboutActivity extends BaseActivity {
@@ -17,7 +18,7 @@ public class AboutActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ExitActivityToTask();
+        ActivityJumpUtils.JumpComFinishActivity(AboutActivity.this,MainActivity.class);
     }
 
 

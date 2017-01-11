@@ -40,7 +40,7 @@ public class SplashActivity extends BaseActivity {
         mSimpleImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityJumpUtils.JumpCommonActivity(SplashActivity.this,MainActivity.class);
+                ActivityJumpUtils.JumpComFinishActivity(SplashActivity.this,MainActivity.class);
             }
         });
 
