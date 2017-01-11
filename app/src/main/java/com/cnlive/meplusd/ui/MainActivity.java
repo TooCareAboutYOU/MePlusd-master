@@ -1,15 +1,50 @@
 package com.cnlive.meplusd.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import com.cnlive.meplusd.R;
 import com.cnlive.meplusd.ui.base.BaseActivity;
+import com.cnlive.meplusd.utils.ActivityManageUtil;
+import com.cnlive.meplusd.utils.ToastUtils;
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import butterknife.Bind;
+
+import static com.cnlive.meplusd.R.id.simpleImage1;
 
 public class MainActivity extends BaseActivity {
+
+    @Bind(simpleImage1)
+    SimpleDraweeView mSimpleImage1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mSimpleImage1.setImageURI(Uri.parse("http://yweb3.cnliveimg.com/img/cnlive/161121103649189_625.png"));
+        mSimpleImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.CustomToast(MainActivity.this,"快点返回");
+            }
+        });
+    }
+
+
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        ExitActivityToTask();
+    }
+
+
+    @Override
+    protected void AddActivityToTask() {
+        ActivityManageUtil.getInstance().pushToStatic(MainActivity.class);
     }
 }

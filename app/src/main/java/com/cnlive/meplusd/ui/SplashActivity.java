@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,11 +13,11 @@ import com.cnlive.meplusd.R;
 import com.cnlive.meplusd.api.UserAPI;
 import com.cnlive.meplusd.model.ErrorMessage;
 import com.cnlive.meplusd.ui.base.BaseActivity;
+import com.cnlive.meplusd.utils.ActivityManageUtil;
 import com.cnlive.meplusd.utils.RestAdapterUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -32,9 +33,9 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        ButterKnife.bind(this);
         mSimpleImage1.setImageURI(Uri.parse("http://yweb3.cnliveimg.com/img/cnlive/161121103649189_625.png"));
 
         mSimpleImage1.setOnClickListener(new View.OnClickListener() {
@@ -59,5 +60,18 @@ public class SplashActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void AddActivityToTask() {
+        ActivityManageUtil.getInstance().pushToStatic(SplashActivity.class);
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //调用双击退出函数
+        if(keyCode == KeyEvent.KEYCODE_BACK) { exitBy2Click(); }
+        return false;
     }
 }

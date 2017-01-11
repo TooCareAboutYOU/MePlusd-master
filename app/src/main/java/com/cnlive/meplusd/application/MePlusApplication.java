@@ -28,7 +28,6 @@ public class MePlusApplication extends Application {
         ime= DeviceUtils.getIEMI(this);
     }
 
-    public static synchronized MePlusApplication getInstance() {
-        return mMePlusApplication;
-    }
+    public static synchronized MePlusApplication getInstance() { return mMePlusApplication; }
+
 }
