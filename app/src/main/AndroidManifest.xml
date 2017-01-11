@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
 
-                <data android:scheme="MePlus"/>
+                <data android:scheme="meplus"/>
             </intent-filter>
         </activity>
         <activity
