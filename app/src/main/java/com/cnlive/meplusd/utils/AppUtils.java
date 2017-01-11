@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import com.orhanobut.logger.Logger;
 
 /**
+ * Created by zhangshuai on 2017-01-11.
  * 跟App相关的辅助类
  */
 public class AppUtils {

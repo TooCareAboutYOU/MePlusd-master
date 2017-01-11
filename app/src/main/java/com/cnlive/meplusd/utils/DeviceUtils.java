@@ -38,7 +38,7 @@ import java.util.Locale;
 /**
  * 系统版本信息类
  *
- * @author zuoxian
+ * Created by zhangshuai on 2017-01-11.
  */
 public class DeviceUtils {
 

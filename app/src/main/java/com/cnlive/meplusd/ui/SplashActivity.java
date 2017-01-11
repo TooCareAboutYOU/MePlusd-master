@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cnlive.meplusd.Config;
 import com.cnlive.meplusd.R;
@@ -42,13 +41,12 @@ public class SplashActivity extends BaseActivity {
             public void success(ErrorMessage errorMessage, Response response) {
                 String str = errorMessage.getErrorMessage().toString();
                 mTvInfo.setText(str.toString());
-                Log.i("TSM", str);
-                Toast.makeText(SplashActivity.this, str, Toast.LENGTH_SHORT).show();
+                Log.i("TSM", "str==="+str);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.i("TSM", error.toString());
+                Log.i("TSM", "error==="+error.toString());
             }
         });
 
