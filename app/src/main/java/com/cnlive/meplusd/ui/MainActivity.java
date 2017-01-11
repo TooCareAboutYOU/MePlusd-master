@@ -1,11 +1,11 @@
 package com.cnlive.meplusd.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import com.cnlive.meplusd.R;
+import com.cnlive.meplusd.ui.base.BaseActivity;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
