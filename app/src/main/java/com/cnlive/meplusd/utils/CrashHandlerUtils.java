@@ -45,7 +45,7 @@ public class CrashHandlerUtils implements Thread.UncaughtExceptionHandler {
         new Thread(){
             @Override
             public void run() {
-                //super.run();
+                super.run();
                 Looper.prepare();
                 new AlertDialog.Builder(mContext)
                         .setTitle("提示")
