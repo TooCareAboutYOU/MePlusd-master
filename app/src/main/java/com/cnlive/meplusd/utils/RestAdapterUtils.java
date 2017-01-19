@@ -89,6 +89,7 @@ public class RestAdapterUtils {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(3000, TimeUnit.MILLISECONDS);
         client.setReadTimeout(5000, TimeUnit.MILLISECONDS);
+
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(level)
                 .setEndpoint(endpoint)
@@ -100,7 +101,6 @@ public class RestAdapterUtils {
                 })
                 .setClient(new OkClient(client))
                 .build();
-
         return restAdapter.create(service);
     }
 
