@@ -12,7 +12,6 @@ import com.cnlive.meplusd.model.AboutModel;
 import com.cnlive.meplusd.model.ExAboutModel;
 import com.cnlive.meplusd.ui.base.BaseActivity;
 import com.cnlive.meplusd.utils.ActivityJumpUtils;
-import com.cnlive.meplusd.utils.ActivityManageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,17 +70,10 @@ public class AboutActivity extends BaseActivity {
 
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         ActivityJumpUtils.JumpComFinishActivity(AboutActivity.this, MainActivity.class);
-    }
-
-
-    @Override
-    protected void AddActivityToTask() {
-        ActivityManageUtil.getInstance().pushToStatic(AboutActivity.class);
     }
 
 }

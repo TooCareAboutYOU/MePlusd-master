@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import com.cnlive.meplusd.R;
 import com.cnlive.meplusd.ui.base.BaseActivity;
-import com.cnlive.meplusd.utils.ActivityManageUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.Bind;
@@ -25,11 +24,6 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
 
 
-    }
-
-    @Override
-    protected void AddActivityToTask() {
-        ActivityManageUtil.getInstance().pushToStatic(SplashActivity.class);
     }
 
 

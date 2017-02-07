@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.cnlive.meplusd.R;
 import com.cnlive.meplusd.ui.base.BaseActivity;
-import com.cnlive.meplusd.utils.ActivityManageUtil;
 import com.cnlive.meplusd.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -42,10 +41,5 @@ public class MainActivity extends BaseActivity {
             exitBy2Click();
         }
         return false;
-    }
-
-    @Override
-    protected void AddActivityToTask() {
-        ActivityManageUtil.getInstance().pushToStatic(MainActivity.class);
     }
 }

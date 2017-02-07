@@ -19,7 +19,8 @@ public abstract class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DealWithException();
-        AddActivityToTask();
+        //AddActivityToTask();
+        ActivityManageUtil.getInstance().pushToStatic(BaseActivity.class);
     }
 
     @Override
@@ -34,7 +35,7 @@ public abstract class BaseActivity extends Activity {
         crashHandlerUtils.init(this);
     }
 
-    protected abstract void AddActivityToTask();
+    //protected abstract void AddActivityToTask();
 
     @Override
     protected void onResume() {
