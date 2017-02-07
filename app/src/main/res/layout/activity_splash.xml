@@ -4,7 +4,6 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/image_splash"
     android:orientation="vertical">
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -17,12 +16,4 @@
         fresco:failureImage="@drawable/icon_loaded_failed"
         fresco:failureImageScaleType="centerCrop"
         fresco:progressBarImage="@drawable/icon_loading"/>
-
-    <TextView
-        android:id="@+id/tv_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="testInfo"/>
-
-
 </LinearLayout>

@@ -25,8 +25,12 @@
         <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">false</item>
-        <!--<item name="android:windowBackground">@drawable/image_splash</item>-->
         <item name="android:fitsSystemWindows">true</item>
+    </style>
+    
+    <style name="ToolBarTitleStytle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
 </resources>

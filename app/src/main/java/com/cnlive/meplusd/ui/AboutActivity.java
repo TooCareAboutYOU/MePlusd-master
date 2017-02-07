@@ -1,5 +1,6 @@
 package com.cnlive.meplusd.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +12,6 @@ import com.cnlive.meplusd.localcache.AboutCache;
 import com.cnlive.meplusd.model.AboutModel;
 import com.cnlive.meplusd.model.ExAboutModel;
 import com.cnlive.meplusd.ui.base.BaseActivity;
-import com.cnlive.meplusd.utils.ActivityJumpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,9 +71,9 @@ public class AboutActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        ActivityJumpUtils.JumpComFinishActivity(AboutActivity.this, MainActivity.class);
+    protected void BackPressed() {
+        startActivity(new Intent(AboutActivity.this,MainActivity.class));
     }
+
 
 }

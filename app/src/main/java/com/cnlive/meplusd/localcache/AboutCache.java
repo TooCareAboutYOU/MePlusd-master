@@ -32,7 +32,7 @@ public class AboutCache {
     }
 
     //精确查询
-    public static AboutModel getAboutModel(Context context,String id){
+    public static AboutModel getAllAboutModel(Context context,String id){
         GreenDaoHelper daoHelper=GreenDaoHelper.getInstance(context);
         List<AboutModel> list=daoHelper.getAboutDao().queryBuilder().where(AboutDao.Properties.Id.eq(id)).list();
         if (list != null && list.size()>0){

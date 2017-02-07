@@ -19,7 +19,6 @@ public abstract class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DealWithException();
-        //AddActivityToTask();
         ActivityManageUtil.getInstance().pushToStatic(BaseActivity.class);
     }
 
@@ -35,7 +34,7 @@ public abstract class BaseActivity extends Activity {
         crashHandlerUtils.init(this);
     }
 
-    //protected abstract void AddActivityToTask();
+    protected abstract void BackPressed();
 
     @Override
     protected void onResume() {
@@ -57,7 +56,6 @@ public abstract class BaseActivity extends Activity {
      * 双击退出函数
      */
     private static Boolean isExit = false;
-
     public void exitBy2Click() {
         Timer tExit = null;
         if (isExit == false) {
@@ -77,4 +75,15 @@ public abstract class BaseActivity extends Activity {
             System.exit(0);
         }
     }
+
+
+    //退出当前actvity，返回上一activity
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ActivityManageUtil.getInstance().finishActivity(this);
+        finish();
+        BackPressed();
+    }
+
 }

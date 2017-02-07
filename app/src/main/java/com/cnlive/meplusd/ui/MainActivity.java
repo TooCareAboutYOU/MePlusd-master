@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.cnlive.meplusd.R;
 import com.cnlive.meplusd.ui.base.BaseActivity;
-import com.cnlive.meplusd.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.Bind;
@@ -28,11 +27,14 @@ public class MainActivity extends BaseActivity {
         mSimpleImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.CustomToast(MainActivity.this,"快点返回");
                 startActivity(new Intent(MainActivity.this,AboutActivity.class));
             }
         });
     }
+
+
+    @Override
+    protected void BackPressed() { }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

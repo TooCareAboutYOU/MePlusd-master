@@ -15,11 +15,4 @@ public class ActivityJumpUtils {
         intent.setClass(now_activity,cla);
         now_activity.startActivity(intent);
     }
-
-    /*普通跳转2：从栈顶移除当前的activity活动，再跳转*/
-    public static void JumpComFinishActivity(Activity now_activity, Class cla){
-        ActivityManageUtil.getInstance().finishActivity(now_activity);
-        now_activity.finish();
-        now_activity.startActivity(new Intent(now_activity,cla));
-    }
 }
