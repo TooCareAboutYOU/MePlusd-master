@@ -13,5 +13,8 @@
     <string name="date_second">秒</string>
     <string name="title_activity_login">Logining...</string>
 
+    <!--<Stirng name="StatuBarHeight">26.67dp</Stirng>-->
+    <string name="toolTitleHeight">48dp</string>
+    <string name="toolHeight">75dp</string>
 
 </resources>

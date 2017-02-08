@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tool_normal"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/activity_Bar_Height"
+    android:background="@drawable/click_refresh">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <!--预留状态栏+高度-->
+        <View android:layout_alignParentTop="true" android:layout_width="match_parent" android:layout_height="@dimen/activity_StatuBar_Height"/>
+
+        <!--自定义导航栏-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_NavigationBar_Height"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorAccent">
+            <ImageView
+                android:id="@+id/img_toolback"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                tools:src="@drawable/click_refresh"/>
+            <TextView
+                android:id="@+id/tv_tooltitle"
+                style="@style/ToolBarTitleStytle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                tools:text="搜索栏"/>
+            <ImageView
+                android:id="@+id/img_toolmenu"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                tools:src="@drawable/click_refresh"/>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>

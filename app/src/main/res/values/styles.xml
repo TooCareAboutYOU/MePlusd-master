@@ -1,22 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Base application theme.   Theme.AppCompat.Light.DarkActionBar   -->
+    <!--android:Theme.Holo.Light.NoActionBar-->
+    <!--Theme.AppCompat.Light.NoActionBar-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:listDivider">@drawable/theme_listdivide</item>
         <item name="android:textAllCaps">false</item>
+        <item name="toolbarStyle">@style/CustomToolbar</item>
     </style>
 
     <!--开机页、引导页-->
     <style name="AppTheme.Splash" parent="AppTheme" >
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorTransparent</item>
+        <item name="android:windowFullscreen">false</item>
         <item name="android:windowBackground">@drawable/image_splash</item>
         <item name="android:fitsSystemWindows">false</item>
+
     </style>
 
     <!--普通页-->
@@ -25,12 +30,17 @@
         <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">false</item>
-        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorBlack</item>
     </style>
     
     <style name="ToolBarTitleStytle">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="CustomToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item><!-- 设置该属性边距为0dp-->
     </style>
 
 </resources>
