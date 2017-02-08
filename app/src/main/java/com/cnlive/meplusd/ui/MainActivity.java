@@ -6,34 +6,39 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
 import com.cnlive.meplusd.R;
 import com.cnlive.meplusd.ui.base.BaseActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.lang.reflect.Field;
-
 import butterknife.Bind;
 
 import static com.cnlive.meplusd.R.id.simpleImage1;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements OnClickListener {
 
     @Bind(simpleImage1)
     SimpleDraweeView mSimpleImage1;
+    @Bind(R.id.img_toolback)
+    ImageView mImgToolback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mSimpleImage1.setImageURI(Uri.parse("http://yweb3.cnliveimg.com/img/cnlive/161121103649189_625.png"));
-        mSimpleImage1.setOnClickListener(new View.OnClickListener() {
+        mSimpleImage1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, SearchActivity.class));
             }
         });
+
+        mImgToolback.setOnClickListener(this);
     }
 
     @Override
@@ -43,27 +48,17 @@ public class MainActivity extends BaseActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    /**
-     * 通过反射的方式获取状态栏高度
-     *
-     * @return
-     */
-    private int getStatusBarHeight() {
-        try {
-            Class<?> c = Class.forName("com.android.internal.R$dimen");
-            Object obj = c.newInstance();
-            Field field = c.getField("status_bar_height");
-            int x = Integer.parseInt(field.get(obj).toString());
-            return getResources().getDimensionPixelSize(x);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+
 
 
     @Override
-    protected void BackPressed() {
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.img_toolback:
+                back();
+                startActivity(new Intent(MainActivity.this,SplashActivity.class));
+                break;
+        }
     }
 
     @Override
@@ -74,6 +69,5 @@ public class MainActivity extends BaseActivity {
         }
         return false;
     }
-
 
 }

@@ -13,10 +13,4 @@ public class SearchActivity extends BaseActivity {
         setContentView(R.layout.activity_search);
     }
 
-    @Override
-    protected void BackPressed() {
-
-    }
-
-
 }

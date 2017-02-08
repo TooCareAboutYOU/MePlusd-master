@@ -1,6 +1,5 @@
 package com.cnlive.meplusd.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -69,11 +68,5 @@ public class AboutActivity extends BaseActivity {
 
 
     }
-
-    @Override
-    protected void BackPressed() {
-        startActivity(new Intent(AboutActivity.this,MainActivity.class));
-    }
-
 
 }

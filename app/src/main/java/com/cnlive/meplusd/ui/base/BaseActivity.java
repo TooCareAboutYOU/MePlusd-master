@@ -134,15 +134,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected abstract void BackPressed();
-
     //退出当前actvity，返回上一activity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        back();
+    }
+
+    public void back(){
         ActivityManageUtil.getInstance().finishActivity(this);
         finish();
-        BackPressed();
     }
 
 }
