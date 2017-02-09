@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="activity_Bar_Height" >75dp</dimen>
-    <dimen name="activity_StatuBar_Height">26.67dp</dimen>
-    <dimen name="activity_NavigationBar_Height">48dp</dimen>
+    <dimen name="activity_Bar_Height" >50dp</dimen>
+    <dimen name="activity_StatuBar_Height">27dp</dimen>
+    <dimen name="activity_NavigationBar_Height">50dp</dimen>
 </resources>

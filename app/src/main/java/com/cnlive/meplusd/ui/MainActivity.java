@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.cnlive.meplusd.R;
+
+import static com.cnlive.meplusd.utils.LogUtils.LOGD;
 
 
 public class MainActivity extends TabActivity {
@@ -23,6 +26,7 @@ public class MainActivity extends TabActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -62,12 +66,15 @@ public class MainActivity extends TabActivity {
 
     @Override
     public void onBackPressed() {
-        if (back_pressed + 2000 > System.currentTimeMillis())
-            super.onBackPressed();
-        else
+        if (back_pressed + 2000 > System.currentTimeMillis()) {
+           super.onBackPressed();
+            LOGD("xk==按了两次");
+        } else {
             Toast.makeText(this, "再次点击退出！", Toast.LENGTH_SHORT).show();
-        back_pressed = System.currentTimeMillis();
+            LOGD("xk==按了一次");
+        }
 
+        back_pressed = System.currentTimeMillis();
     }
 
 
