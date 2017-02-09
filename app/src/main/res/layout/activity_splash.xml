@@ -18,7 +18,7 @@
             android:layout_height="80dip"
             fresco:failureImage="@drawable/icon_loaded_failed"
             fresco:failureImageScaleType="centerCrop"
-            fresco:placeholderImage="@drawable/click_refresh"
+            fresco:placeholderImage="@drawable/splash"
             fresco:placeholderImageScaleType="centerCrop"
             fresco:progressBarImage="@drawable/icon_loading"
             fresco:roundAsCircle="true"/>
