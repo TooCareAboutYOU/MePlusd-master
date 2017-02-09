@@ -1,24 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<TabHost
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@android:id/tabhost"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorRed">
+    android:background="@color/colorWhite"
+    >
 
-    <include layout="@layout/toolbar_normal"/>
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/simpleImage1"
-        android:layout_width="80dip"
-        android:layout_height="80dip"
-        android:layout_centerInParent="true"
-        fresco:placeholderImage="@drawable/click_refresh"
-        fresco:placeholderImageScaleType="centerCrop"
-        fresco:roundAsCircle="true"
-        fresco:failureImage="@drawable/icon_loaded_failed"
-        fresco:failureImageScaleType="centerCrop"
-        fresco:progressBarImage="@drawable/icon_loading"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/colorWhite"
+            >
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#bbb"/>
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:showDividers="none">
+            </TabWidget>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</TabHost>

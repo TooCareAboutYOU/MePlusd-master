@@ -1,28 +1,25 @@
 package com.cnlive.meplusd.ui;
 
+import android.app.TabActivity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
+import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.cnlive.meplusd.R;
-import com.cnlive.meplusd.ui.base.BaseActivity;
-import com.facebook.drawee.view.SimpleDraweeView;
 
-import butterknife.Bind;
 
-import static com.cnlive.meplusd.R.id.simpleImage1;
+public class MainActivity extends TabActivity {
 
-public class MainActivity extends BaseActivity implements OnClickListener {
 
-    @Bind(simpleImage1)
-    SimpleDraweeView mSimpleImage1;
-    @Bind(R.id.img_toolback)
-    ImageView mImgToolback;
+    private TabHost host;
+    private TabHost.TabSpec tab1, tab2, tab3;
+    private View view1, view2, view3;
+    private LayoutInflater inflater;
+    private static long back_pressed;
+    private String preTab = "tab1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,44 +27,48 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         setContentView(R.layout.activity_main);
 
 
-        mSimpleImage1.setImageURI(Uri.parse("http://yweb3.cnliveimg.com/img/cnlive/161121103649189_625.png"));
-        mSimpleImage1.setOnClickListener(new OnClickListener() {
+        inflater = LayoutInflater.from(this);
+        host = this.getTabHost();
+
+
+        tab1 = host.newTabSpec("tab1");   //创建选项卡其中的参数不是固定的，只是一个标志
+        startActivity(R.layout.tab_home, tab1, view1, TabHomeActivity.class);
+
+        tab2 = host.newTabSpec("tab2");
+        startActivity(R.layout.tab_live, tab2, view2, TabLiveActivity.class);
+
+        tab3 = host.newTabSpec("tab3");
+        startActivity(R.layout.tab_my, tab3, view3, MyInfoActivity.class);
+
+
+        host.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SearchActivity.class));
+            public void onTabChanged(String tabId) {
+                preTab = tabId;
             }
         });
 
-        mImgToolback.setOnClickListener(this);
     }
+
+
+    private void startActivity(int resource, TabHost.TabSpec tab, View view, Class cls) {
+        view = inflater.inflate(resource, null);
+        tab.setIndicator(view);  //设置标题
+        Intent intent = new Intent(this, cls);
+        tab.setContent(intent);  //这是跳转内容
+        host.addTab(tab);  //添加到host中
+    }
+
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        setBackIcon(R.drawable.click_refresh);
-        setCustomTitle("首页");
-        return super.onCreateOptionsMenu(menu);
+    public void onBackPressed() {
+        if (back_pressed + 2000 > System.currentTimeMillis())
+            super.onBackPressed();
+        else
+            Toast.makeText(this, "再次点击退出！", Toast.LENGTH_SHORT).show();
+        back_pressed = System.currentTimeMillis();
+
     }
 
-
-
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.img_toolback:
-                back();
-                startActivity(new Intent(MainActivity.this,SplashActivity.class));
-                break;
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //调用双击退出函数
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exitBy2Click();
-        }
-        return false;
-    }
 
 }

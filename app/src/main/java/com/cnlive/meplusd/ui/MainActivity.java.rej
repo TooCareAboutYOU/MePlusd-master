@@ -1,0 +1,9 @@
+diff a/app/src/main/java/com/cnlive/meplusd/ui/MainActivity.java b/app/src/main/java/com/cnlive/meplusd/ui/MainActivity.java	(rejected hunks)
+@@ -4,6 +4,7 @@
+  import android.app.TabActivity;
+  import android.content.Intent;
+  import android.os.Bundle;
+++<<<<<<< Updated upstream
+ +import android.view.KeyEvent;
+ +import android.view.Menu;
+ +import android.view.View;
