@@ -1,17 +1,33 @@
 package com.ivt.android.me.ui.base;
 
-import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import butterknife.ButterKnife;
 
 /**
  * @创建者 xk
  * @创建时间 2017/2/9 16:32
  * @描述 ${TODO}
  */
-public class BaseFragment extends Fragment{
-    protected Context mContext;
+public abstract class BaseFragment extends Fragment{
+    private View fragmentRootView;
 
-    public BaseFragment(Context context) {
-        mContext = context;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(fragmentRootView == null){
+            fragmentRootView = inflater.inflate(getLayoutRes(), container, false);
+
+        }
+        ViewGroup parent = (ViewGroup) fragmentRootView.getParent();
+        if (parent != null) {
+            parent.removeView(fragmentRootView);
+        }
+        ButterKnife.bind(this, fragmentRootView);
+        return fragmentRootView;
     }
+    protected abstract int getLayoutRes();
 }
