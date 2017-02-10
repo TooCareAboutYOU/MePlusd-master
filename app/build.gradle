@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.cnlive.meplusd"
+        applicationId "com.ivt.android.me"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
@@ -52,6 +52,7 @@ dependencies {
     compile 'com.facebook.fresco:fresco:1.0.0'
     compile 'com.android.support:recyclerview-v7:25.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.alibaba:fastjson:1.2.24'
     testCompile 'org.testng:testng:6.10'
     testCompile 'junit:junit:4.12'
 }
