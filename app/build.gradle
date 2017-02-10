@@ -32,6 +32,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets{
+        main{
+            jniLibs.srcDirs=['libs']
+        }
+    }
 }
 
 dependencies {
@@ -55,4 +61,5 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.24'
     testCompile 'org.testng:testng:6.10'
     testCompile 'junit:junit:4.12'
+    compile files('libs/libcnliveutil.jar')
 }
