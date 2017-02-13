@@ -9,6 +9,8 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.ivt.android.me.utils.DeviceUtils;
 import com.squareup.okhttp.OkHttpClient;
 
+import org.xutils.x;
+
 /**
  * Created by zhangshuai on 2017-01-10.
  */
@@ -32,6 +34,9 @@ public class MePlusApplication extends Application {
         ImagePipelineConfig config= OkHttpImagePipelineConfigFactory.newBuilder(this,new OkHttpClient()).setDownsampleEnabled(true).build();
         Fresco.initialize(this,config);
         ime= DeviceUtils.getIEMI(this);
+
+        x.Ext.init(this);
+        x.Ext.setDebug(false); //是否输出debug日志，开启debug会影响性能。
     }
 
     public static synchronized MePlusApplication getInstance() { return mMePlusApplication; }

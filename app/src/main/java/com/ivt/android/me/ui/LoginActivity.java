@@ -1,6 +1,7 @@
 package com.ivt.android.me.ui;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -227,6 +228,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     // 快捷登录  获取验证码
     private void quickgetCode() {
+        timer.start();
         /**
          * 快捷登录前发送手机验证码
          * @param type
@@ -244,6 +246,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 switch (what) {
                     case IUserService.SUCCESS:
                         //成功
+                        timer.onFinish();
                         break;
                     case IUserService.ERROR_PARAM:
                         Log.e(TAG, IUserService.message_error_param);
@@ -276,7 +279,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         });
     }
+    private CountDownTimer timer = new CountDownTimer(60000, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+            mBtnPgetcode.setText((millisUntilFinished / 1000) + "s重新获取");
+            mBtnPgetcode.setEnabled(false);
+            mBtnPgetcode.setAlpha(0.5f);
+        }
 
+        @Override
+        public void onFinish() {
+            mBtnPgetcode.setEnabled(true);
+        }
+    };
     //手机快捷登录
     private void quickLogin() {
         /**
@@ -360,6 +375,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
+    //通知服务端登录状态(成功、失败)
     private void LoginService(UserData mUserData){
         String str= UserSdk.LoginService(mUserData);
         String versionNum=String.valueOf(AppUtils.getVersionCode(LoginActivity.this));
