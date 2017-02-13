@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cnlive.libs.user.model.UserData;
 import com.ivt.android.me.R;
 import com.ivt.android.me.utils.ActivityManageUtil;
 import com.ivt.android.me.utils.CrashHandlerUtils;
@@ -25,6 +26,7 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    protected static UserData mUserData;
 
     @Nullable
     @Bind(R.id.tool_normal)

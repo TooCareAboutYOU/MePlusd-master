@@ -2,6 +2,7 @@ package com.ivt.android.me.application;
 
 import android.app.Application;
 
+import com.cnlive.libs.util.Config;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.backends.okhttp.OkHttpImagePipelineConfigFactory;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
@@ -25,8 +26,7 @@ public class MePlusApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //Config.init(this, "118_itdr6ijv09", "24557a1060598e010749ec11b43ac9d62e8a765d3463cf");
-
+        Config.init(this, "118_itdr6ijv09", "24557a1060598e010749ec11b43ac9d62e8a765d3463cf");
 
         mMePlusApplication=this;
         ImagePipelineConfig config= OkHttpImagePipelineConfigFactory.newBuilder(this,new OkHttpClient()).setDownsampleEnabled(true).build();
