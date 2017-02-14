@@ -1,6 +1,5 @@
 package com.ivt.android.me.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.View;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.ivt.android.me.R;
 import com.ivt.android.me.ui.base.BaseActivity;
+import com.ivt.android.me.utils.ActivityJumpUtils;
 
 import butterknife.Bind;
 
@@ -36,8 +36,8 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        this.finish();
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        back();
+        ActivityJumpUtils.JumpActivity(SplashActivity.this, MainActivity.class);
     }
 
     @Override

@@ -10,7 +10,7 @@ import android.content.Intent;
 public class ActivityJumpUtils {
 
     /*普通跳转1*/
-    public static void JumpComUnFinishActivity(Activity now_activity, Class cla){
+    public static void JumpActivity(Activity now_activity, Class cla){
         Intent intent=new Intent();
         intent.setClass(now_activity,cla);
         now_activity.startActivity(intent);

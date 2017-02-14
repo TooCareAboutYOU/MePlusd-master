@@ -149,5 +149,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActivityManageUtil.getInstance().finishActivity(this);
         finish();
     }
-
+    
 }
