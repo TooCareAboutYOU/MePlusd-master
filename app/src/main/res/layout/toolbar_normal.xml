@@ -12,11 +12,11 @@
         android:layout_height="match_parent"
         >
 
-        <!--&lt;!&ndash;预留状态栏+高度&ndash;&gt;-->
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/activity_StatuBar_Height"-->
-        <!--android:layout_alignParentTop="true"/>-->
+        <!--预留状态栏+高度-->
+        <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_StatuBar_Height"
+        android:layout_alignParentTop="true"/>
 
         <!--自定义导航栏-->
         <RelativeLayout

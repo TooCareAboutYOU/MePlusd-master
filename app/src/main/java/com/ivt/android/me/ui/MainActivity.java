@@ -1,27 +1,37 @@
 package com.ivt.android.me.ui;
 
-import android.app.TabActivity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TabHost;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.ivt.android.me.R;
-import com.ivt.android.me.utils.LogUtils;
+import com.ivt.android.me.ui.base.BaseActivity;
+import com.ivt.android.me.ui.fragment.MyInfoFragment;
+import com.ivt.android.me.ui.fragment.TabHomeFragment;
+import com.ivt.android.me.ui.fragment.TabLiveFragment;
+
+import butterknife.Bind;
 
 
-public class MainActivity extends TabActivity {
+public class MainActivity extends BaseActivity {
 
 
-    private TabHost host;
-    private TabHost.TabSpec tab1, tab2, tab3;
-    private View view1, view2, view3;
-    private LayoutInflater inflater;
-    private static long back_pressed;
-    private String preTab = "tab1";
+    @Bind(R.id.img_toolback)
+    ImageView mImgToolback;
+    @Bind(R.id.tv_tooltitle)
+    TextView mTvTooltitle;
+    @Bind(R.id.img_toolmenu)
+    ImageView mImgToolmenu;
+    private Class fragmentArray[] = {TabHomeFragment.class, TabLiveFragment.class, MyInfoFragment.class};
+
+    private int mImageViewArray[] = {R.drawable.tab_img_selector, R.drawable.btn_open_live, R.drawable.tab_myinfo_img_selector};
+
+    private String mTextviewArray[] = {"首页", "", "我的"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,52 +39,34 @@ public class MainActivity extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mImgToolback.setImageResource(R.drawable.ic_launcher);
+        mImgToolmenu.setImageResource(R.drawable.btn_open_live);
+        mTvTooltitle.setText("蜜家");
 
-        inflater = LayoutInflater.from(this);
-        host = this.getTabHost();
-
-
-        tab1 = host.newTabSpec("tab1");   //创建选项卡其中的参数不是固定的，只是一个标志
-        startActivity(R.layout.tab_home, tab1, view1, TabHomeActivity.class);
-
-        tab2 = host.newTabSpec("tab2");
-        startActivity(R.layout.tab_live, tab2, view2, TabLiveActivity.class);
-
-        tab3 = host.newTabSpec("tab3");
-        startActivity(R.layout.tab_my, tab3, view3, MyInfoActivity.class);
-
-
-        host.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                preTab = tabId;
-            }
-        });
-
-    }
-
-
-    private void startActivity(int resource, TabHost.TabSpec tab, View view, Class cls) {
-        view = inflater.inflate(resource, null);
-        tab.setIndicator(view);  //设置标题
-        Intent intent = new Intent(this, cls);
-        tab.setContent(intent);  //这是跳转内容
-        host.addTab(tab);  //添加到host中
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (back_pressed + 2000 > System.currentTimeMillis()) {
-           super.onBackPressed();
-            LogUtils.LOGD("xk==按了两次");
-        } else {
-            Toast.makeText(this, "再次点击退出！", Toast.LENGTH_SHORT).show();
-            LogUtils.LOGD("xk==按了一次");
+        FragmentTabHost fg = (FragmentTabHost) findViewById(R.id.tabhost);
+        fg.setup(this, getSupportFragmentManager(), R.id.fragment);
+        int count = fragmentArray.length;
+        //循环放置
+        for (int i = 0; i < count; i++) {
+            TabHost.TabSpec tabSpec = fg.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
+            fg.addTab(tabSpec, fragmentArray[i], null);
         }
-
-        back_pressed = System.currentTimeMillis();
+        //去掉了底部导航栏的间隔竖线
+        fg.getTabWidget().setDividerDrawable(null);
     }
 
+    //给导航栏放置图片和标题
+    private View getTabItemView(int index) {
+        View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.tab_content, null);
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.tab_img);
+        imageView.setImageResource(mImageViewArray[index]);
+        TextView textView = (TextView) view.findViewById(R.id.tab_title);
+        textView.setText(mTextviewArray[index]);
+        if (index == 1) {
+            textView.setVisibility(View.GONE);
+        }
+        return view;
+    }
 
 }

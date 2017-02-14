@@ -70,18 +70,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentActicity.FullScreen">
         </activity>
-        <activity
-            android:name=".ui.MyInfoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransparentActicity.FullScreen"/>
-        <activity
-            android:name=".ui.TabHomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransparentActicity.FullScreen"/>
-        <activity
-            android:name=".ui.TabLiveActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransparentActicity.FullScreen"/>
         <!--登录-->
         <activity
             android:name=".ui.LoginActivity"
