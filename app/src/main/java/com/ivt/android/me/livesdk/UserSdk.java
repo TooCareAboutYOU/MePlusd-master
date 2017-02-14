@@ -31,7 +31,6 @@ public class UserSdk {
         obj.put("sinaUid",mUserData.getData().getSinaUid());
         obj.put("renrenUid",mUserData.getData().getRenrenUid());
         obj.put("hUid",mUserData.getData().gethUid());
-
         String str=obj.toString();
 
         return str;

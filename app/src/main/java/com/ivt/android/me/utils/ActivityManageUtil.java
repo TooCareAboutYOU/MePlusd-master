@@ -43,7 +43,7 @@ public class ActivityManageUtil {
      * @param type
      */
     public void pushToStatic(Class activity, ACTIVITY_START_TYPE type) {
-        LogUtils.LOGD("当前的模式==" + activity.toString());
+        //LogUtils.LOGD("当前的模式==" + activity.toString());
         Activity_Item activity_item = new Activity_Item(activity, type);
         int length = instance.activity_list.size();
         boolean isHas = instance.activity_list.contains(activity_item);

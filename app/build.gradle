@@ -16,9 +16,7 @@ android {
             ldLibs "log", "z", "m"
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
         }
-
         multiDexEnabled true
-
     }
     buildTypes {
         debug {

@@ -18,6 +18,8 @@ import com.ivt.android.me.utils.ActivityManageUtil;
 import com.ivt.android.me.utils.CrashHandlerUtils;
 import com.ivt.android.me.utils.ToastUtils;
 
+import org.xutils.x;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -70,7 +72,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
-
+        x.view().inject(this);
         setupToolbar();
     }
 

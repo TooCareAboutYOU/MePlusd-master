@@ -1,7 +1,9 @@
 package com.ivt.android.me.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,8 +24,13 @@ import com.ivt.android.me.utils.AppUtils;
 import com.ivt.android.me.utils.RestAdapterUtils;
 import com.ivt.android.me.utils.ToastUtils;
 
+import org.xutils.http.RequestParams;
+import org.xutils.view.annotation.Event;
+import org.xutils.x;
+
+import java.io.File;
+
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -70,8 +77,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
-        userAPI= RestAdapterUtils.getRestAPI(Configs.URL,UserAPI.class);
+
+        userAPI = RestAdapterUtils.getRestAPI(Configs.SJR_URL, UserAPI.class);
         mBtnAccountLogin.setOnClickListener(this);
         mBtnGetcode.setOnClickListener(this);
 
@@ -279,6 +286,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         });
     }
+
     private CountDownTimer timer = new CountDownTimer(60000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
@@ -292,6 +300,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             mBtnPgetcode.setEnabled(true);
         }
     };
+
     //手机快捷登录
     private void quickLogin() {
         /**
@@ -340,7 +349,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     //快捷登录
-    private void AccountLogin(){
+    private void AccountLogin() {
         /**
          * 用户名&密码登录
          *
@@ -376,17 +385,132 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     //通知服务端登录状态(成功、失败)
-    private void LoginService(UserData mUserData){
-        String str= UserSdk.LoginService(mUserData);
-        String versionNum=String.valueOf(AppUtils.getVersionCode(LoginActivity.this));
+    private void LoginService(UserData mUserData) {
+        String str = UserSdk.LoginService(mUserData);
+        String versionNum = String.valueOf(AppUtils.getVersionCode(LoginActivity.this));
         userAPI.SynchronousUserData(versionNum, "a", str, new retrofit.Callback<ErrorMessage>() {
             @Override
             public void success(ErrorMessage errorMessage, Response response) {
-                Toast.makeText(LoginActivity.this, "登录状态："+errorMessage.getErrorCode(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "登录状态：" + errorMessage.getErrorCode(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void failure(RetrofitError error) {  }
+            public void failure(RetrofitError error) {
+            }
+        });
+    }
+
+    boolean isFinished = false;
+
+    //xUtils3-——GET
+    @Event(value = R.id.btn_xGet, type = View.OnClickListener.class)
+    private void get(View v) {
+        String url = Configs.SJR_URL + "/zGWUserSynchronization.html";
+        String str = UserSdk.LoginService(mUserData);
+        String versionNum = String.valueOf(AppUtils.getVersionCode(LoginActivity.this));
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("加载中....");
+        progressDialog.show();
+
+        RequestParams params = new RequestParams(url);
+        params.addQueryStringParameter("version", versionNum);
+        params.addQueryStringParameter("plat", "a");
+        params.addQueryStringParameter("data", str);
+        org.xutils.common.Callback.Cancelable cancelable = x.http().get(params, new org.xutils.common.Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String msg) {
+                Toast.makeText(LoginActivity.this, "请求状态1：成功 \n" + msg.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(LoginActivity.this, "请求状态2：错误", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+                Toast.makeText(LoginActivity.this, "请求状态3：被取消", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFinished() {
+                isFinished = true;
+                progressDialog.cancel();
+                Toast.makeText(LoginActivity.this, "请求状态4：完成", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //主动调用取消请求
+        if (isFinished) {
+            cancelable.cancel();
+            Toast.makeText(LoginActivity.this, "请求状态4：取消", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    //上传
+    @Event(value = R.id.btn_upload, type = View.OnClickListener.class)
+    private void myUpload(View v){
+        String path="文件地址",url="上传地址";
+        RequestParams params=new RequestParams(url);
+        params.setMultipart(true);
+        params.addBodyParameter("file",new File(path));
+        x.http().post(params, new org.xutils.common.Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    //下载
+    @Event(value = R.id.btn_download, type = View.OnClickListener.class)
+    private void myDownload(View v){
+        String url="http://wideo00.cnlive.com/video/data1/2016/0812/111917/3000/5ecc5b0567194d8fb0eb3db52240a091_111917_1_3000.m3u8";
+        RequestParams params=new RequestParams(url);
+        //自定义保存路径
+        params.setSaveFilePath(Environment.getExternalStorageDirectory()+"/AAAAAA/");
+        //自定义文件名
+        params.setAutoRename(true);
+        x.http().post(params, new org.xutils.common.Callback.ProgressCallback<File>() {
+            @Override
+            public void onSuccess(File result) {
+                Toast.makeText(LoginActivity.this,"文件保存路径："+ result.getPath(), Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) { }
+            @Override
+            public void onCancelled(CancelledException cex) { }
+            @Override
+            public void onFinished() { }
+
+            //网络请求之前回调
+            @Override
+            public void onWaiting() { }
+            //网络请求开始的时候回调
+            @Override
+            public void onStarted() { }
+            //下载的时候不断回调的方法
+            @Override
+            public void onLoading(long total, long current, boolean isDownloading) {
+                //当前进度和文件总大小
+                Log.i("JAVA","current："+ current +"，total："+total);
+            }
         });
     }
 
