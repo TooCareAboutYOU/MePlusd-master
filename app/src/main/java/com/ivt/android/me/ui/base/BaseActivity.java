@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -145,9 +146,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         back();
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            back();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public void back(){
         ActivityManageUtil.getInstance().finishActivity(this);
         finish();
     }
-    
 }
