@@ -37,7 +37,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
         back();
-        ActivityJumpUtils.JumpActivity(SplashActivity.this, MainActivity.class);
+        ActivityJumpUtils.JumpActivity(SplashActivity.this, LoginActivity.class);
     }
 
     @Override

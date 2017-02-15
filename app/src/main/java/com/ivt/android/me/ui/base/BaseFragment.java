@@ -20,7 +20,7 @@ public abstract class BaseFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(fragmentRootView == null){
             fragmentRootView = inflater.inflate(getLayoutRes(), container, false);
-
+            //fragmentRootView= x.view().inject(getLayoutRes(),inflater,container);
         }
         ViewGroup parent = (ViewGroup) fragmentRootView.getParent();
         if (parent != null) {
@@ -30,4 +30,10 @@ public abstract class BaseFragment extends Fragment{
         return fragmentRootView;
     }
     protected abstract int getLayoutRes();
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
 }

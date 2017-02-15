@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.cnlive.libs.user.IUserService;
 import com.cnlive.libs.user.UserUtil;
 import com.cnlive.libs.user.model.UserData;
@@ -20,6 +21,7 @@ import com.ivt.android.me.api.UserAPI;
 import com.ivt.android.me.livesdk.UserSdk;
 import com.ivt.android.me.model.ErrorMessage;
 import com.ivt.android.me.ui.base.BaseActivity;
+import com.ivt.android.me.utils.ActivityJumpUtils;
 import com.ivt.android.me.utils.AppUtils;
 import com.ivt.android.me.utils.RestAdapterUtils;
 import com.ivt.android.me.utils.ToastUtils;
@@ -68,6 +70,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     EditText mEtAccountpwd;
     @Bind(R.id.btn_accountLogin2)
     Button mBtnAccountLogin2;
+    @Bind(R.id.btn_xGet)
+    Button btn_xget;
 
     private int isSeccussLogin = 0;
 
@@ -86,6 +90,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mBtnQuickLogin.setOnClickListener(this);
 
         mBtnAccountLogin2.setOnClickListener(this);
+
+        btn_xget.setOnClickListener(this);
     }
 
     @Override
@@ -106,7 +112,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.btn_accountLogin2:  //账号登录
                 AccountLogin();
-
+                break;
+            case R.id.btn_xGet:   //xUtils3 网络请求：GET方式
+                xGet();
                 break;
         }
     }
@@ -348,8 +356,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-    //快捷登录
+    //账号登录
     private void AccountLogin() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("加载中....");
+        progressDialog.show();
+
         /**
          * 用户名&密码登录
          *
@@ -365,7 +377,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     case IUserService.SUCCESS:
                         //成功 obj返回用户信息
                         mUserData = ((UserData) obj);
-                        LoginService(mUserData);
+                        LoginService(mUserData,progressDialog);
                         break;
                     case IUserService.ERROR_PARAM:
                         Log.e(TAG, IUserService.message_error_param);
@@ -385,29 +397,42 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     //通知服务端登录状态(成功、失败)
-    private void LoginService(UserData mUserData) {
+    private void LoginService(UserData mUserData,final ProgressDialog progressDialog) {
         String str = UserSdk.LoginService(mUserData);
         String versionNum = String.valueOf(AppUtils.getVersionCode(LoginActivity.this));
         userAPI.SynchronousUserData(versionNum, "a", str, new retrofit.Callback<ErrorMessage>() {
             @Override
             public void success(ErrorMessage errorMessage, Response response) {
                 Toast.makeText(LoginActivity.this, "登录状态：" + errorMessage.getErrorCode(), Toast.LENGTH_SHORT).show();
+                btn_xget.setEnabled(true);
+                progressDialog.cancel();
             }
 
             @Override
-            public void failure(RetrofitError error) {
-            }
+            public void failure(RetrofitError error) { }
         });
     }
 
-    boolean isFinished = false;
-
     //xUtils3-——GET
-    @Event(value = R.id.btn_xGet, type = View.OnClickListener.class)
-    private void get(View v) {
+    //@Event(value = R.id.btn_xGet, type = View.OnClickListener.class)
+    private org.xutils.common.Callback.Cancelable cancelable;
+    public void xGet() {
         String url = Configs.SJR_URL + "/zGWUserSynchronization.html";
         String str = UserSdk.LoginService(mUserData);
         String versionNum = String.valueOf(AppUtils.getVersionCode(LoginActivity.this));
+
+        if (url.equals("") || url==null){
+            Toast.makeText(this, "地址不能为空！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (str.equals("") || str==null){
+            Toast.makeText(this, "云端数据不能为空！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (versionNum.equals("") || versionNum==null){
+            Toast.makeText(this, "版本号不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载中....");
@@ -417,10 +442,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         params.addQueryStringParameter("version", versionNum);
         params.addQueryStringParameter("plat", "a");
         params.addQueryStringParameter("data", str);
-        org.xutils.common.Callback.Cancelable cancelable = x.http().get(params, new org.xutils.common.Callback.CommonCallback<String>() {
+        cancelable = x.http().get(params, new org.xutils.common.Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String msg) {
-                Toast.makeText(LoginActivity.this, "请求状态1：成功 \n" + msg.toString(), Toast.LENGTH_SHORT).show();
+                ErrorMessage message= JSON.parseObject(msg,ErrorMessage.class);
+                Toast.makeText(LoginActivity.this, "请求状态1：成功 \n" + message.toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -435,83 +461,113 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onFinished() {
-                isFinished = true;
                 progressDialog.cancel();
                 Toast.makeText(LoginActivity.this, "请求状态4：完成", Toast.LENGTH_SHORT).show();
+                IsCancel(true,cancelable);
             }
         });
+
+    }
+    private void IsCancel(boolean isFinished,org.xutils.common.Callback.Cancelable cancelable){
         //主动调用取消请求
         if (isFinished) {
             cancelable.cancel();
-            Toast.makeText(LoginActivity.this, "请求状态4：取消", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "请求状态5：关闭请求", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     //上传
-    @Event(value = R.id.btn_upload, type = View.OnClickListener.class)
+//    @Event(value = R.id.btn_upload, type = View.OnClickListener.class)
     private void myUpload(View v){
-        String path="文件地址",url="上传地址";
-        RequestParams params=new RequestParams(url);
-        params.setMultipart(true);
-        params.addBodyParameter("file",new File(path));
-        x.http().post(params, new org.xutils.common.Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
+//        String path="文件地址",url="上传地址";
+//        RequestParams params=new RequestParams(url);
+//        params.setMultipart(true);
+//        params.addBodyParameter("file",new File(path));
+//        x.http().post(params, new org.xutils.common.Callback.CommonCallback<String>() {
+//            @Override
+//            public void onSuccess(String result) {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//
+//            }
+//        });
     }
 
     //下载
     @Event(value = R.id.btn_download, type = View.OnClickListener.class)
     private void myDownload(View v){
-        String url="http://wideo00.cnlive.com/video/data1/2016/0812/111917/3000/5ecc5b0567194d8fb0eb3db52240a091_111917_1_3000.m3u8";
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("加载中....");
+        progressDialog.show();
+//http://wideo00.cnlive.com/video/data1/2016/0812/111917/3000/5ecc5b0567194d8fb0eb3db52240a091_111917_1_3000.m3u8
+        String url="https://www.baidu.com/img/bd_logo1.png";
+        String path=Environment.getExternalStorageDirectory()+"/AAAAAA/";
         RequestParams params=new RequestParams(url);
         //自定义保存路径
-        params.setSaveFilePath(Environment.getExternalStorageDirectory()+"/AAAAAA/");
+        params.setSaveFilePath(path);
         //自定义文件名
         params.setAutoRename(true);
         x.http().post(params, new org.xutils.common.Callback.ProgressCallback<File>() {
             @Override
             public void onSuccess(File result) {
-                Toast.makeText(LoginActivity.this,"文件保存路径："+ result.getPath(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,"下载成功 \n 文件保存路径："+ result.getPath(), Toast.LENGTH_LONG).show();
+                //progressDialog.dismiss();
             }
             @Override
-            public void onError(Throwable ex, boolean isOnCallback) { }
+            public void onError(Throwable ex, boolean isOnCallback) {
+                //progressDialog.dismiss();
+                Toast.makeText(LoginActivity.this, "请求状态：错误", Toast.LENGTH_SHORT).show();
+            }
             @Override
-            public void onCancelled(CancelledException cex) { }
+            public void onCancelled(CancelledException cex) {
+                cex.printStackTrace();
+                Toast.makeText(LoginActivity.this, "下载失败，请检查网络和SD卡", Toast.LENGTH_SHORT).show();
+                //progressDialog.dismiss();
+            }
             @Override
-            public void onFinished() { }
+            public void onFinished() {
+                //progressDialog.dismiss();
+                Toast.makeText(LoginActivity.this, "请求状态：完成", Toast.LENGTH_SHORT).show();
+            }
 
             //网络请求之前回调
             @Override
-            public void onWaiting() { }
+            public void onWaiting() {
+                Toast.makeText(LoginActivity.this, "请求状态：加载中...", Toast.LENGTH_SHORT).show();
+            }
             //网络请求开始的时候回调
             @Override
-            public void onStarted() { }
+            public void onStarted() {
+                Toast.makeText(LoginActivity.this, "请求状态：开始", Toast.LENGTH_SHORT).show();
+            }
             //下载的时候不断回调的方法
             @Override
             public void onLoading(long total, long current, boolean isDownloading) {
                 //当前进度和文件总大小
-                Log.i("JAVA","current："+ current +"，total："+total);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressDialog.setMax((int) total);
+                progressDialog.setProgress((int) current);
+
             }
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ActivityJumpUtils.JumpActivity(LoginActivity.this,MainActivity.class);
+    }
 }
