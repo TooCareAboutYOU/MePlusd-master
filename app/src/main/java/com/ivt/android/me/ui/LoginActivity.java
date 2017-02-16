@@ -24,19 +24,25 @@ import com.ivt.android.me.ui.base.BaseActivity;
 import com.ivt.android.me.utils.ActivityJumpUtils;
 import com.ivt.android.me.utils.AppUtils;
 import com.ivt.android.me.utils.RestAdapterUtils;
+import com.ivt.android.me.utils.SDCardUtils;
 import com.ivt.android.me.utils.ToastUtils;
+import com.ivt.android.me.utils.xUtils3;
 
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.Event;
 import org.xutils.x;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
+
+
 
     private static String TAG = "LoginActivity";
 
@@ -50,7 +56,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Bind(R.id.btn_quickLogin)
     Button mBtnQuickLogin;
 
-
     /* 注册 */
     @Bind(R.id.et_phonenum)
     EditText mEtPhonenum;
@@ -63,7 +68,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Bind(R.id.btn_accountLogin)
     Button mBtnAccountLogin;
 
-    /* 账号登录 */
+    /* 账号登录 测试账号：13816765902  123456  uid: 1222679  */
+    /*请求活动id http://192.168.6.172:8080/portal-clt/getAnchorActivityId.html?uid=1222679  */
     @Bind(R.id.et_aphoneNum)
     EditText mEtAphoneNum;
     @Bind(R.id.et_accountpwd)
@@ -72,6 +78,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     Button mBtnAccountLogin2;
     @Bind(R.id.btn_xGet)
     Button btn_xget;
+
+    /*手机号码修改账号密码*/
+    @Bind(R.id.et_uphonenum)
+    EditText et_getphone;
+    @Bind(R.id.tv_upCode)
+    EditText tv_upCode;
+    @Bind(R.id.btn_upgetcode)
+    Button btn_upgetcode;
+    @Bind(R.id.btn_updatepwd)
+    Button btn_updatepwd;
+
 
     private int isSeccussLogin = 0;
 
@@ -92,18 +109,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mBtnAccountLogin2.setOnClickListener(this);
 
         btn_xget.setOnClickListener(this);
+
+        btn_upgetcode.setOnClickListener(this);
+
+        btn_updatepwd.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_getcode:  //注册获取验证码
+            case R.id.btn_getcode:  //注册账号：获取验证码
                 getCode();
                 break;
-            case R.id.btn_accountLogin:  //注册
+            case R.id.btn_accountLogin:  //注册账号
                 getUserInfo();
                 break;
-
             case R.id.btn_pgetcode:  //快捷登录获取验证码
                 quickgetCode();
                 break;
@@ -114,7 +134,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 AccountLogin();
                 break;
             case R.id.btn_xGet:   //xUtils3 网络请求：GET方式
-                xGet();
+                //xGet1();
+                xGet2();
+                break;
+            case R.id.btn_upgetcode:  //修改账号密码：获取验证码
+                getUpdateCode();
+                break;
+            case R.id.btn_updatepwd:  // 确认修改
+                updatePwd();
                 break;
         }
     }
@@ -139,6 +166,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     case IUserService.SUCCESS:
                         //成功
                         mBtnGetcode.setEnabled(false);
+                        Toast.makeText(LoginActivity.this, "验证码发送成功", Toast.LENGTH_SHORT).show();
                         break;
                     case IUserService.ERROR_PARAM:
                         Log.e(TAG, IUserService.message_error_param);
@@ -175,6 +203,107 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
+    //修改账号密码：获取验证码
+    private void getUpdateCode(){
+        /**
+         *  找回或修改密码前发手机验证码
+         *
+         * @param type
+         * @param mobile        手机号
+         * @param callback      回调
+         *
+         * 发送手机验证码需要传入一个type值用来区分发送的验证码是用来做什么的
+         * QUICK_LOGIN--->快捷登陆前发送手机验证码
+         * REGISTER_OR_MODIFY_MOBILE---> 注册或修改手机号前发手机验证码
+         * RETRIEVE_OR_MODIFY_PASSWORD---> 找回或修改密码前发手机验证码
+         */
+        UserUtil.sendMessage(IUserService.RETRIEVE_OR_MODIFY_PASSWORD,et_getphone.getText().toString(), new Callback() {
+            @Override
+            public void onState(int what, String extra, Object obj) {
+                switch (what) {
+                    case IUserService.SUCCESS:
+                        //成功
+                        Toast.makeText(LoginActivity.this, "验证码发送成功", Toast.LENGTH_SHORT).show();
+                        break;
+                    case IUserService.ERROR_PARAM:
+                        Log.e(TAG, IUserService.message_error_param);
+                        break;
+                    case IUserService.ERROR_MOBILE:
+                        Log.e(TAG, IUserService.message_error_mobile);
+                        break;
+                    case IUserService.ERROR_CLIENT_PLAT:
+                        Log.e(TAG, IUserService.message_error_client_plat);
+                        break;
+                    case IUserService.ERROR_MOBILE_NOT_REGISTER:
+                        Log.e(TAG, IUserService.message_error_mobile_not_register);
+                        break;
+                    case IUserService.ERROR_MESSAGE_SERVER:
+                        Log.e(TAG, IUserService.message_error_server);
+                        break;
+                    case IUserService.ERROR_MESSAGE_SERVER_ANALYSIS:
+                        Log.e(TAG, IUserService.message_error_message_server_analysis);
+                        break;
+                    case IUserService.ERROR_OTHER:
+                        Log.e(TAG, IUserService.message_error_other);
+                        break;
+                    case IUserService.ERROR_SEND_MESSAGE_TO_MUCH:
+                        Log.e(TAG, IUserService.message_error_send_message_to_much);
+                        break;
+                    case IUserService.ERROR_SEND_MESSAGE_FAILED:
+                        Log.e(TAG, IUserService.message_error_send_message_failed);
+                        break;
+                    case IUserService.ERROR_MESSAGE_OTHER:
+                        Log.e(TAG, IUserService.message_error_message_other);
+                        break;
+                }
+            }
+        });
+    }
+
+    //确认修改账号密码
+    private void updatePwd(){
+        /**
+         * 通过手机号修改密码
+         *
+         * @param mobile           手机号
+         * @param verificationCode 手机验证码
+         * @param newPwd           新密码
+         * @param callback         回调
+         */
+        UserUtil.modifyPwdWithMob(et_getphone.getText().toString(), tv_upCode.getText().toString(), "123456", new Callback() {
+            @Override
+            public void onState(int what, String extra, Object obj) {
+                switch (what) {
+                    case IUserService.SUCCESS:
+                        //成功
+                        Toast.makeText(LoginActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                        break;
+                    case IUserService.ERROR_PARAM:
+                        Log.e(TAG, IUserService.message_error_param);
+                        break;
+                    case IUserService.ERROR_MOBILE:
+                        Log.e(TAG, IUserService.message_error_mobile);
+                        break;
+                    case IUserService.ERROR_VERIFICATION_CODE_LENGTH:
+                        Log.e(TAG, IUserService.message_error_verfication_code_length);
+                        break;
+                    case IUserService.ERROR_PASSWORD_CONTENT:
+                        Log.e(TAG, IUserService.message_error_password_content);
+                        break;
+                    case IUserService.ERROR_VERIFICATION_CODE:
+                        Log.e(TAG, IUserService.message_error_verfication_code);
+                        break;
+                    case IUserService.ERROR_MOBILE_NOT_REGISTER:
+                        Log.e(TAG, IUserService.message_error_mobile_not_register);
+                        break;
+                    case IUserService.ERROR_OTHER:
+                        Log.e(TAG, IUserService.message_error_other);
+                        break;
+                }
+            }
+        });
+    }
+
     //注册
     private UserData getUserInfo() {
         /**
@@ -196,6 +325,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 //成功 obj返回用户信息
                                 isSeccussLogin = 1;
                                 mUserData = ((UserData) obj);
+                                Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                                 break;
                             case IUserService.ERROR_PARAM:
                                 Log.e(TAG, IUserService.message_error_param);
@@ -378,6 +508,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         //成功 obj返回用户信息
                         mUserData = ((UserData) obj);
                         LoginService(mUserData,progressDialog);
+                        Log.i(TAG,mUserData.toString());
                         break;
                     case IUserService.ERROR_PARAM:
                         Log.e(TAG, IUserService.message_error_param);
@@ -395,7 +526,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         });
     }
-
     //通知服务端登录状态(成功、失败)
     private void LoginService(UserData mUserData,final ProgressDialog progressDialog) {
         String str = UserSdk.LoginService(mUserData);
@@ -404,8 +534,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void success(ErrorMessage errorMessage, Response response) {
                 Toast.makeText(LoginActivity.this, "登录状态：" + errorMessage.getErrorCode(), Toast.LENGTH_SHORT).show();
-                btn_xget.setEnabled(true);
                 progressDialog.cancel();
+                if (errorMessage.getErrorCode().equals("0")){
+                    btn_xget.setEnabled(true);
+                }
             }
 
             @Override
@@ -416,7 +548,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     //xUtils3-——GET
     //@Event(value = R.id.btn_xGet, type = View.OnClickListener.class)
     private org.xutils.common.Callback.Cancelable cancelable;
-    public void xGet() {
+    public void xGet1() {
         String url = Configs.SJR_URL + "/zGWUserSynchronization.html";
         String str = UserSdk.LoginService(mUserData);
         String versionNum = String.valueOf(AppUtils.getVersionCode(LoginActivity.this));
@@ -476,6 +608,63 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    public void xGet2() {
+        String url = Configs.SJR_URL + "/zGWUserSynchronization.html";
+        String str = UserSdk.LoginService(mUserData);
+        String versionNum = String.valueOf(AppUtils.getVersionCode(LoginActivity.this));
+
+        if (url.equals("") || url==null){
+            Toast.makeText(this, "地址不能为空！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (str.equals("") || str==null){
+            Toast.makeText(this, "云端数据不能为空！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (versionNum.equals("") || versionNum==null){
+            Toast.makeText(this, "版本号不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("加载中....");
+        progressDialog.show();
+
+        Map map=new HashMap();
+        map.put("version",versionNum);
+        map.put("plat", "a");
+        map.put("data", str);
+        xUtils3.Get(url,map,new xUtils3.MyCallBack<String>(){
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                Toast.makeText(LoginActivity.this, "2_GET：完成", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                progressDialog.cancel();
+                Toast.makeText(LoginActivity.this, "2_GET：成功"+result.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                Toast.makeText(LoginActivity.this, "2_GET：错误", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+                super.onCancelled(cex);
+                Toast.makeText(LoginActivity.this, "2_GET：被取消", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
+
     //上传
 //    @Event(value = R.id.btn_upload, type = View.OnClickListener.class)
     private void myUpload(View v){
@@ -508,11 +697,65 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     //下载
     @Event(value = R.id.btn_download, type = View.OnClickListener.class)
+    private void getWay(View v){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("加载中....");
+        progressDialog.show();
+        String url="https://www.baidu.com/img/bd_logo1.png";
+        String path=xUtils3.IMAGE_SDCARD_MADER+xUtils3.geFileName()+"bd_logo1.png";
+        xUtils3.DownLoadFile(url, path, new xUtils3.MyCallBack<File>(){
+            @Override
+            public void onSuccess(File result) {
+                super.onSuccess(result);
+
+                if (SDCardUtils.isSDCardEnable()){  //判断是否存在SD卡
+                    Toast.makeText(LoginActivity.this,"1：下载成功 \n 文件保存路径："+ result.getPath(), Toast.LENGTH_LONG).show();
+                }
+
+                //SimpleDraweeView img= (SimpleDraweeView) findViewById(R.id.img_download);
+                //img.setImageURI(Uri.parse(result.toString()));
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                ex.printStackTrace();
+                Toast.makeText(LoginActivity.this, "1：请求状态：错误", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+                super.onCancelled(cex);
+                cex.printStackTrace();
+                Toast.makeText(LoginActivity.this, "1：下载失败，请检查网络和SD卡", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                Toast.makeText(LoginActivity.this, "1：请求状态：完成", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+
+
+    //删除下载的图片
+    @Event(value = R.id.btn_delete, type = View.OnClickListener.class)
+    private void deletePic(View v){
+        String path=xUtils3.IMAGE_SDCARD_MADER+xUtils3.geFileName()+"bd_logo1.png";
+        File file_path=new File(path);
+        file_path.delete();
+        Toast.makeText(this, "删除图片地址：" + path, Toast.LENGTH_SHORT).show();
+    }
+
+
     private void myDownload(View v){
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载中....");
         progressDialog.show();
-//http://wideo00.cnlive.com/video/data1/2016/0812/111917/3000/5ecc5b0567194d8fb0eb3db52240a091_111917_1_3000.m3u8
+        //http://wideo00.cnlive.com/video/data1/2016/0812/111917/3000/5ecc5b0567194d8fb0eb3db52240a091_111917_1_3000.m3u8
         String url="https://www.baidu.com/img/bd_logo1.png";
         String path=Environment.getExternalStorageDirectory()+"/AAAAAA/";
         RequestParams params=new RequestParams(url);
@@ -520,7 +763,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         params.setSaveFilePath(path);
         //自定义文件名
         params.setAutoRename(true);
-        x.http().post(params, new org.xutils.common.Callback.ProgressCallback<File>() {
+        x.http().get(params, new org.xutils.common.Callback.ProgressCallback<File>() {
             @Override
             public void onSuccess(File result) {
                 Toast.makeText(LoginActivity.this,"下载成功 \n 文件保存路径："+ result.getPath(), Toast.LENGTH_LONG).show();
