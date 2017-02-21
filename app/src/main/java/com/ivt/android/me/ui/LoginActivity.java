@@ -17,16 +17,19 @@ import com.cnlive.libs.user.model.UserData;
 import com.cnlive.libs.util.data.network.Callback;
 import com.ivt.android.me.Configs;
 import com.ivt.android.me.R;
+import com.ivt.android.me.api.CmsAPI;
 import com.ivt.android.me.api.UserAPI;
 import com.ivt.android.me.livesdk.UserSdk;
 import com.ivt.android.me.model.ErrorMessage;
+import com.ivt.android.me.model.T1;
 import com.ivt.android.me.ui.base.BaseActivity;
 import com.ivt.android.me.utils.ActivityJumpUtils;
 import com.ivt.android.me.utils.AppUtils;
+import com.ivt.android.me.utils.LogUtils;
 import com.ivt.android.me.utils.RestAdapterUtils;
 import com.ivt.android.me.utils.SDCardUtils;
 import com.ivt.android.me.utils.ToastUtils;
-import com.ivt.android.me.utils.xUtils3;
+
 
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.Event;
@@ -634,40 +637,54 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         map.put("version",versionNum);
         map.put("plat", "a");
         map.put("data", str);
-        xUtils3.Get(url,map,new xUtils3.MyCallBack<String>(){
-            @Override
-            public void onFinished() {
-                super.onFinished();
-                Toast.makeText(LoginActivity.this, "2_GET：完成", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                super.onSuccess(result);
-                progressDialog.cancel();
-                Toast.makeText(LoginActivity.this, "2_GET：成功"+result.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                super.onError(ex, isOnCallback);
-                Toast.makeText(LoginActivity.this, "2_GET：错误", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                super.onCancelled(cex);
-                Toast.makeText(LoginActivity.this, "2_GET：被取消", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        xUtils3.Get(url,map,new xUtils3.MyCallBack<String>(){
+//            @Override
+//            public void onFinished() {
+//                super.onFinished();
+//                Toast.makeText(LoginActivity.this, "2_GET：完成", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                super.onSuccess(result);
+//                progressDialog.cancel();
+//                Toast.makeText(LoginActivity.this, "2_GET：成功"+result.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                super.onError(ex, isOnCallback);
+//                Toast.makeText(LoginActivity.this, "2_GET：错误", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//                super.onCancelled(cex);
+//                Toast.makeText(LoginActivity.this, "2_GET：被取消", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
 
 
     //上传
-//    @Event(value = R.id.btn_upload, type = View.OnClickListener.class)
+    @Event(value = R.id.btn_upload, type = View.OnClickListener.class)
     private void myUpload(View v){
+        CmsAPI cmsAPI=RestAdapterUtils.getRestAPI(Configs.SJR_URL,CmsAPI.class);
+        cmsAPI.getMainPageJson(new retrofit.Callback<T1>() {
+            @Override
+            public void success(T1 t1, Response response) {
+                ToastUtils.showLong(LoginActivity.this,"T1："+t1.toString());
+                LogUtils.LOGE("T1："+t1.toString());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                ToastUtils.showLong(LoginActivity.this,"error："+error.toString());
+                LogUtils.LOGE("error："+error.toString());
+            }
+        });
 //        String path="文件地址",url="上传地址";
 //        RequestParams params=new RequestParams(url);
 //        params.setMultipart(true);
@@ -698,45 +715,47 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     //下载
     @Event(value = R.id.btn_download, type = View.OnClickListener.class)
     private void getWay(View v){
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("加载中....");
-        progressDialog.show();
-        String url="https://www.baidu.com/img/bd_logo1.png";
-        String path=xUtils3.IMAGE_SDCARD_MADER+xUtils3.geFileName()+"bd_logo1.png";
-        xUtils3.DownLoadFile(url, path, new xUtils3.MyCallBack<File>(){
-            @Override
-            public void onSuccess(File result) {
-                super.onSuccess(result);
 
-                if (SDCardUtils.isSDCardEnable()){  //判断是否存在SD卡
-                    Toast.makeText(LoginActivity.this,"1：下载成功 \n 文件保存路径："+ result.getPath(), Toast.LENGTH_LONG).show();
-                }
 
-                //SimpleDraweeView img= (SimpleDraweeView) findViewById(R.id.img_download);
-                //img.setImageURI(Uri.parse(result.toString()));
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                super.onError(ex, isOnCallback);
-                ex.printStackTrace();
-                Toast.makeText(LoginActivity.this, "1：请求状态：错误", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                super.onCancelled(cex);
-                cex.printStackTrace();
-                Toast.makeText(LoginActivity.this, "1：下载失败，请检查网络和SD卡", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFinished() {
-                super.onFinished();
-                Toast.makeText(LoginActivity.this, "1：请求状态：完成", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-            }
-        });
+//        final ProgressDialog progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage("加载中....");
+//        progressDialog.show();
+//        String url="https://www.baidu.com/img/bd_logo1.png";
+//        String path=xUtils3.IMAGE_SDCARD_MADER+xUtils3.geFileName()+"bd_logo1.png";
+//        xUtils3.DownLoadFile(url, path, new xUtils3.MyCallBack<File>(){
+//            @Override
+//            public void onSuccess(File result) {
+//                super.onSuccess(result);
+//
+//                if (SDCardUtils.isSDCardEnable()){  //判断是否存在SD卡
+//                    Toast.makeText(LoginActivity.this,"1：下载成功 \n 文件保存路径："+ result.getPath(), Toast.LENGTH_LONG).show();
+//                }
+//
+//                //SimpleDraweeView img= (SimpleDraweeView) findViewById(R.id.img_download);
+//                //img.setImageURI(Uri.parse(result.toString()));
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                super.onError(ex, isOnCallback);
+//                ex.printStackTrace();
+//                Toast.makeText(LoginActivity.this, "1：请求状态：错误", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//                super.onCancelled(cex);
+//                cex.printStackTrace();
+//                Toast.makeText(LoginActivity.this, "1：下载失败，请检查网络和SD卡", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                super.onFinished();
+//                Toast.makeText(LoginActivity.this, "1：请求状态：完成", Toast.LENGTH_SHORT).show();
+//                progressDialog.dismiss();
+//            }
+//        });
     }
 
 
@@ -744,10 +763,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     //删除下载的图片
     @Event(value = R.id.btn_delete, type = View.OnClickListener.class)
     private void deletePic(View v){
-        String path=xUtils3.IMAGE_SDCARD_MADER+xUtils3.geFileName()+"bd_logo1.png";
-        File file_path=new File(path);
-        file_path.delete();
-        Toast.makeText(this, "删除图片地址：" + path, Toast.LENGTH_SHORT).show();
+//        String path=xUtils3.IMAGE_SDCARD_MADER+xUtils3.geFileName()+"bd_logo1.png";
+//        File file_path=new File(path);
+//        file_path.delete();
+//        Toast.makeText(this, "删除图片地址：" + path, Toast.LENGTH_SHORT).show();
     }
 
 

@@ -36,6 +36,12 @@ android {
             jniLibs.srcDirs=['libs']
         }
     }
+
+    allprojects{
+        repositories{
+            mavenCentral()
+        }
+    }
 }
 
 dependencies {
