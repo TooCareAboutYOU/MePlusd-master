@@ -46,6 +46,10 @@ import retrofit.client.Response;
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
 
+    /*
+    * http://blog.csdn.net/ithouse/article/details/45367421  手势监听刷新控件使用
+    * */
+
 
     private static String TAG = "LoginActivity";
 
@@ -671,20 +675,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     //上传
     @Event(value = R.id.btn_upload, type = View.OnClickListener.class)
     private void myUpload(View v){
-        CmsAPI cmsAPI=RestAdapterUtils.getRestAPI(Configs.SJR_URL,CmsAPI.class);
-        cmsAPI.getMainPageJson(new retrofit.Callback<T1>() {
-            @Override
-            public void success(T1 t1, Response response) {
-                ToastUtils.showLong(LoginActivity.this,"T1："+t1.toString());
-                LogUtils.LOGE("T1："+t1.toString());
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                ToastUtils.showLong(LoginActivity.this,"error："+error.toString());
-                LogUtils.LOGE("error："+error.toString());
-            }
-        });
+//        CmsAPI cmsAPI=RestAdapterUtils.getRestAPI(Configs.SJR_URL,CmsAPI.class);
+//        cmsAPI.getMainPageJson(new retrofit.Callback<T1>() {
+//            @Override
+//            public void success(T1 t1, Response response) {
+//                ToastUtils.showLong(LoginActivity.this,"T1："+t1.toString());
+//                LogUtils.LOGE("T1："+t1.toString());
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                ToastUtils.showLong(LoginActivity.this,"error："+error.toString());
+//                LogUtils.LOGE("error："+error.toString());
+//            }
+//        });
 //        String path="文件地址",url="上传地址";
 //        RequestParams params=new RequestParams(url);
 //        params.setMultipart(true);

@@ -8,13 +8,21 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.ivt.android.me.Configs;
 import com.ivt.android.me.R;
+import com.ivt.android.me.api.CmsAPI;
+import com.ivt.android.me.model.T1;
 import com.ivt.android.me.ui.base.BaseActivity;
 import com.ivt.android.me.ui.fragment.MyInfoFragment;
 import com.ivt.android.me.ui.fragment.TabHomeFragment;
 import com.ivt.android.me.ui.fragment.TabLiveFragment;
+import com.ivt.android.me.utils.LogUtils;
+import com.ivt.android.me.utils.RestAdapterUtils;
+import com.ivt.android.me.utils.ToastUtils;
 
 import butterknife.Bind;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends BaseActivity {
@@ -36,6 +44,21 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        CmsAPI cmsAPI= RestAdapterUtils.getRestAPI(Configs.SJR_URL,CmsAPI.class);
+        cmsAPI.getMainPageJson(new retrofit.Callback<T1>() {
+            @Override
+            public void success(T1 t1, Response response) {
+                ToastUtils.showLong(MainActivity.this,"T1："+t1.toString());
+                LogUtils.LOGE("T1："+t1.toString());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                ToastUtils.showLong(MainActivity.this,"error："+error.toString());
+                LogUtils.LOGE("error："+error.toString());
+            }
+        });
 
         mImgToolback.setImageResource(R.drawable.ic_launcher);
         mImgToolmenu.setImageResource(R.drawable.btn_open_live);
