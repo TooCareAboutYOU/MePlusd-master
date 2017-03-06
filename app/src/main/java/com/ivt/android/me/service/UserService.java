@@ -1,4 +1,4 @@
-package com.ivt.android.me.localcache;
+package com.ivt.android.me.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;

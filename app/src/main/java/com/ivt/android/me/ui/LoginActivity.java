@@ -1,8 +1,6 @@
 package com.ivt.android.me.ui;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +8,6 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,19 +21,14 @@ import com.cnlive.libs.user.model.UserData;
 import com.cnlive.libs.util.data.network.Callback;
 import com.ivt.android.me.Configs;
 import com.ivt.android.me.R;
-import com.ivt.android.me.api.CmsAPI;
 import com.ivt.android.me.api.SmsInterface;
 import com.ivt.android.me.api.UserAPI;
 import com.ivt.android.me.livesdk.UserSdk;
 import com.ivt.android.me.model.ErrorMessage;
-import com.ivt.android.me.model.T1;
 import com.ivt.android.me.ui.base.BaseActivity;
 import com.ivt.android.me.utils.ActivityJumpUtils;
 import com.ivt.android.me.utils.AppUtils;
-import com.ivt.android.me.utils.LogUtils;
 import com.ivt.android.me.utils.RestAdapterUtils;
-import com.ivt.android.me.utils.SDCardUtils;
-import com.ivt.android.me.utils.SmsContent;
 import com.ivt.android.me.utils.ToastUtils;
 
 

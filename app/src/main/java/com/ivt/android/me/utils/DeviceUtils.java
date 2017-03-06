@@ -27,11 +27,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 
@@ -448,6 +451,7 @@ public class DeviceUtils {
         return imei;
     }
 
+    //字符串型的ip
     public static String getIPAddress() {
         boolean useIPv4 = true;
         try {
@@ -463,6 +467,7 @@ public class DeviceUtils {
                         if (useIPv4) {
                             if (isIPv4)
                                 return sAddr;
+                            LogUtils.LOGD("本地链接ip地址===="+sAddr);
                         } else {
                             if (!isIPv4) {
                                 int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
@@ -474,6 +479,70 @@ public class DeviceUtils {
             }
         } catch (Exception ex) { } // for now eat exceptions
         return "";
+    }
+
+    //整形的ip
+    public static String getLocalIPAddress() throws SocketException {
+        for(Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();){
+            NetworkInterface intf = en.nextElement();
+            for(Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();){
+                InetAddress inetAddress = enumIpAddr.nextElement();
+                if(!inetAddress.isLoopbackAddress() && (inetAddress instanceof Inet4Address)){
+                    LogUtils.LOGD("IPv4地址==="+inetAddress.getHostAddress().toString());
+                    return inetAddress.getHostAddress().toString();
+                }
+            }
+        }
+        return "null";
+    }
+
+    /**
+     * 将字符串型ip转成int型ip
+     * @param strIp
+     * @return
+     */
+    public static int Ip2Int(String strIp){
+        String[] ss = strIp.split("\\.");
+        if(ss.length != 4){
+            return 0;
+        }
+        byte[] bytes = new byte[ss.length];
+        for(int i = 0; i < bytes.length; i++){
+            bytes[i] = (byte) Integer.parseInt(ss[i]);
+        }
+        return byte2Int(bytes);
+    }
+    /**
+     * 将int型ip转成String型ip
+     * @param intIp
+     * @return
+     */
+    public static String int2Ip(int intIp){
+        byte[] bytes = int2byte(intIp);
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < 4; i++){
+            sb.append(bytes[i] & 0xFF);
+            if(i < 3){
+                sb.append(".");
+            }
+        }
+        return sb.toString();
+    }
+
+    private static byte[] int2byte(int i) {
+        byte[] bytes = new byte[4];
+        bytes[0] = (byte) (0xff & i);
+        bytes[1] = (byte) ((0xff00 & i) >> 8);
+        bytes[2] = (byte) ((0xff0000 & i) >> 16);
+        bytes[3] = (byte) ((0xff000000 & i) >> 24);
+        return bytes;
+    }
+    private static int byte2Int(byte[] bytes) {
+        int n = bytes[0] & 0xFF;
+        n |= ((bytes[1] << 8) & 0xFF00);
+        n |= ((bytes[2] << 16) & 0xFF0000);
+        n |= ((bytes[3] << 24) & 0xFF000000);
+        return n;
     }
 
 //    public static String getPhoneNumber(Context context) {

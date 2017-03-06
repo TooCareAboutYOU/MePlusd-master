@@ -1,4 +1,4 @@
-package com.ivt.android.me.utils;
+package com.ivt.android.me.service;
 
 import android.content.Context;
 import android.database.ContentObserver;
@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+
 import com.ivt.android.me.api.SmsInterface;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +17,7 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2017/2/21 0021.
  */
 
-public class SmsContent extends ContentObserver {
+public class SmsService extends ContentObserver {
 
     private Cursor cursor = null;
     private Context context;
@@ -24,7 +26,7 @@ public class SmsContent extends ContentObserver {
 
     public void setSmsMessage(SmsInterface sms){ this.smsInterface=sms; }
 
-    public SmsContent(Handler handler, Context context) {
+    public SmsService(Handler handler, Context context) {
         super(handler);
         this.context = context;
     }

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.ivt.android.me.R;
 import com.ivt.android.me.ui.base.BaseActivity;
+import com.ivt.android.me.utils.DeviceUtils;
 
 import org.xutils.view.annotation.Event;
 
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,8 +41,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private Button btnStop;
     private StartThread st;
     private ReceiveThread rt;
-    private String IpAddress="192.168.3.141";
+    private String IpAddress="192.168.6.239";
     private int PortNumber=1994;
+
+    public SearchActivity() throws SocketException {
+        DeviceUtils.getLocalIPAddress(); //
+        DeviceUtils.getIPAddress();  //
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +118,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         public void run() {
             try {
 
-                socket = new Socket(IpAddress,PortNumber);//连接服务端的IP
+                socket = new Socket(IpAddress,PortNumber);//连接服务端的IP、端口号
                 //启动接收数据的线程
                 rt = new ReceiveThread(socket);
                 rt.start();
