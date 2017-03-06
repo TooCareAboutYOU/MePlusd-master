@@ -1,9 +1,16 @@
 package com.ivt.android.me.ui;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +25,7 @@ import com.cnlive.libs.util.data.network.Callback;
 import com.ivt.android.me.Configs;
 import com.ivt.android.me.R;
 import com.ivt.android.me.api.CmsAPI;
+import com.ivt.android.me.api.SmsInterface;
 import com.ivt.android.me.api.UserAPI;
 import com.ivt.android.me.livesdk.UserSdk;
 import com.ivt.android.me.model.ErrorMessage;
@@ -28,6 +36,7 @@ import com.ivt.android.me.utils.AppUtils;
 import com.ivt.android.me.utils.LogUtils;
 import com.ivt.android.me.utils.RestAdapterUtils;
 import com.ivt.android.me.utils.SDCardUtils;
+import com.ivt.android.me.utils.SmsContent;
 import com.ivt.android.me.utils.ToastUtils;
 
 
@@ -43,11 +52,12 @@ import butterknife.Bind;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
 
     /*
-    * http://blog.csdn.net/ithouse/article/details/45367421  手势监听刷新控件使用
+    *  http://blog.csdn.net/qiantujava/article/details/9903891
+    *  http://blog.csdn.net/getchance/article/details/8478993  手势监听刷新控件使用
     * */
 
 
@@ -101,6 +111,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private UserAPI userAPI;
 
+    private SmsContent smsContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +132,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         btn_upgetcode.setOnClickListener(this);
 
         btn_updatepwd.setOnClickListener(this);
+
+//        if (this.checkSelfPermission(Manifest.permission.READ_SMS)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            //申请READ_SMS权限
+//            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_SMS}, 1);
+//        }
+
+        smsContent=new SmsContent(new Handler(),this);
+        //注册短信变化监听
+        this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, smsContent);
+
     }
 
     @Override
@@ -135,6 +158,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 quickgetCode();
                 break;
             case R.id.btn_quickLogin:  //快捷登录
+                timer.cancel();
+                mBtnPgetcode.setText("重新获取");
+                //mBtnPgetcode.setFocusable(true);
+                mBtnPgetcode.setEnabled(true);
+                mBtnPgetcode.setAlpha(1f);
+
                 quickLogin();
                 break;
             case R.id.btn_accountLogin2:  //账号登录
@@ -378,7 +407,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         return null;
     }
 
-    // 快捷登录  获取验证码
+    //快捷登录  获取验证码
     private void quickgetCode() {
         timer.start();
         /**
@@ -398,7 +427,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 switch (what) {
                     case IUserService.SUCCESS:
                         //成功
-                        timer.onFinish();
                         break;
                     case IUserService.ERROR_PARAM:
                         Log.e(TAG, IUserService.message_error_param);
@@ -432,7 +460,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-    private CountDownTimer timer = new CountDownTimer(60000, 1000) {
+    /*验证码倒计时*/
+    public CountDownTimer timer = new CountDownTimer(60000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
             mBtnPgetcode.setText((millisUntilFinished / 1000) + "s重新获取");
@@ -442,7 +471,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         @Override
         public void onFinish() {
+            mBtnPgetcode.setText("重新获取");
+            //mBtnPgetcode.setFocusable(true);
             mBtnPgetcode.setEnabled(true);
+            mBtnPgetcode.setAlpha(1f);
         }
     };
 
@@ -836,4 +868,40 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onBackPressed();
         ActivityJumpUtils.JumpActivity(LoginActivity.this,MainActivity.class);
     }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        smsContent.setSmsMessage(new SmsInterface() {
+            @Override
+            public void getSmsMessage(String msg) {
+                ToastUtils.showShort(LoginActivity.this,"验证码："+msg);
+                mEtPhonewCode.setText(msg);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.getContentResolver().unregisterContentObserver(smsContent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        doNext(requestCode,grantResults);
+    }
+
+    private void doNext(int requestCode, int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                // Permission Denied
+            }
+        }
+    }
 }
+

@@ -87,13 +87,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+
     public void setBackIcon(int drawableId){ custom_back.setBackgroundResource(drawableId); }
 
     public void setMenuIcon(int drawableId){ custom_menu.setBackgroundResource(drawableId); }
 
     public Toolbar getToolbar(){ return mToolbar; }
 
-    public void setCustomTitle(String title){
+    public void setToolBarTitle(String title){
         if (custom_title != null){
             custom_title.setText(title);
         }
