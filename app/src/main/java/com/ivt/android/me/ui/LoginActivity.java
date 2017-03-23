@@ -25,6 +25,7 @@ import com.ivt.android.me.api.SmsInterface;
 import com.ivt.android.me.api.UserAPI;
 import com.ivt.android.me.livesdk.UserSdk;
 import com.ivt.android.me.model.ErrorMessage;
+import com.ivt.android.me.service.SmsService;
 import com.ivt.android.me.ui.base.BaseActivity;
 import com.ivt.android.me.utils.ActivityJumpUtils;
 import com.ivt.android.me.utils.AppUtils;
@@ -103,7 +104,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private UserAPI userAPI;
 
-    private SmsContent smsContent;
+    private SmsService smsService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,9 +132,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 //            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_SMS}, 1);
 //        }
 
-        smsContent=new SmsContent(new Handler(),this);
+        smsService=new SmsService(new Handler(),this);
         //注册短信变化监听
-        this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, smsContent);
+        this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, smsService);
 
     }
 
@@ -609,6 +610,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onSuccess(String msg) {
                 ErrorMessage message= JSON.parseObject(msg,ErrorMessage.class);
+
                 Toast.makeText(LoginActivity.this, "请求状态1：成功 \n" + message.toString(), Toast.LENGTH_SHORT).show();
             }
 
@@ -865,7 +867,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onStart() {
         super.onStart();
-        smsContent.setSmsMessage(new SmsInterface() {
+        smsService.setSmsMessage(new SmsInterface() {
             @Override
             public void getSmsMessage(String msg) {
                 ToastUtils.showShort(LoginActivity.this,"验证码："+msg);
@@ -877,7 +879,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.getContentResolver().unregisterContentObserver(smsContent);
+        this.getContentResolver().unregisterContentObserver(smsService);
     }
 
     @Override

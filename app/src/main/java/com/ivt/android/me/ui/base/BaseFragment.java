@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 import butterknife.ButterKnife;
 
 /**
@@ -27,13 +29,25 @@ public abstract class BaseFragment extends Fragment{
             parent.removeView(fragmentRootView);
         }
         ButterKnife.bind(this, fragmentRootView);
+
+        initView();
         return fragmentRootView;
     }
     protected abstract int getLayoutRes();
+
+    protected void initView(){
+
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Fresco.getImagePipeline().clearMemoryCaches();
     }
 }
