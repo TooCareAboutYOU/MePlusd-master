@@ -23,9 +23,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 public class SearchActivity extends BaseActivity implements View.OnClickListener {
 
     //"192.168.6.172", 8088

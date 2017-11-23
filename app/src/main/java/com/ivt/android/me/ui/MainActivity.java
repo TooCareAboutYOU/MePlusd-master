@@ -12,6 +12,7 @@ import com.ivt.android.me.Configs;
 import com.ivt.android.me.R;
 import com.ivt.android.me.api.CmsAPI;
 import com.ivt.android.me.model.T1;
+import com.ivt.android.me.model.TestData;
 import com.ivt.android.me.ui.base.BaseActivity;
 import com.ivt.android.me.ui.fragment.MyInfoFragment;
 import com.ivt.android.me.ui.fragment.TabHomeFragment;
@@ -20,7 +21,6 @@ import com.ivt.android.me.utils.LogUtils;
 import com.ivt.android.me.utils.RestAdapterUtils;
 import com.ivt.android.me.utils.ToastUtils;
 
-import butterknife.Bind;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -28,11 +28,8 @@ import retrofit.client.Response;
 public class MainActivity extends BaseActivity {
 
 
-    @Bind(R.id.img_toolback)
     ImageView mImgToolback;
-    @Bind(R.id.tv_tooltitle)
     TextView mTvTooltitle;
-    @Bind(R.id.img_toolmenu)
     ImageView mImgToolmenu;
     private Class fragmentArray[] = {TabHomeFragment.class, TabLiveFragment.class, MyInfoFragment.class};
 
@@ -45,10 +42,12 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         CmsAPI cmsAPI= RestAdapterUtils.getRestAPI(Configs.SJR_URL,CmsAPI.class);
-        cmsAPI.getMainPageJson(new retrofit.Callback<T1>() {
+        cmsAPI.getMainPageJson(new retrofit.Callback<TestData>() {
             @Override
-            public void success(T1 t1, Response response) {
+            public void success(TestData t1, Response response) {
                 ToastUtils.showLong(MainActivity.this,"T1："+t1.toString());
                 LogUtils.LOGE("T1："+t1.toString());
             }
@@ -74,6 +73,14 @@ public class MainActivity extends BaseActivity {
         }
         //去掉了底部导航栏的间隔竖线
         fg.getTabWidget().setDividerDrawable(null);
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        mImgToolback= (ImageView) findViewById(R.id.img_toolback);
+        mTvTooltitle= (TextView) findViewById(R.id.tv_tooltitle);
+        mImgToolmenu= (ImageView) findViewById(R.id.img_toolmenu);
     }
 
     //给导航栏放置图片和标题

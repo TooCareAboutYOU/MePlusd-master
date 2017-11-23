@@ -13,13 +13,10 @@ import com.ivt.android.me.R;
 import com.ivt.android.me.ui.base.BaseActivity;
 import com.ivt.android.me.utils.ActivityJumpUtils;
 
-import butterknife.Bind;
 
 public class SplashActivity extends BaseActivity implements View.OnClickListener {
 
-    @Bind(R.id.simpleImage1)
     SimpleDraweeView mSimpleImage1;
-    @Bind(R.id.tv_time)
     TextView tvTime;
 
     @Override
@@ -39,6 +36,8 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             }
         }, 1000);
 
+        mSimpleImage1= (SimpleDraweeView) findViewById(R.id.simpleImage1);
+        tvTime= (TextView) findViewById(R.id.tv_time);
 
     }
 

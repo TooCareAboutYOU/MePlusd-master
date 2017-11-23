@@ -24,28 +24,21 @@ import org.xutils.x;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected static UserData mUserData;
 
     @Nullable
-    @Bind(R.id.tool_normal)
     protected
     Toolbar mToolbar;
 
     @Nullable
-    @Bind(R.id.img_toolback)
     public ImageView custom_back;
 
     @Nullable
-    @Bind(R.id.tv_tooltitle)
     public TextView custom_title;
 
     @Nullable
-    @Bind(R.id.img_toolmenu)
     public ImageView custom_menu;
 
 
@@ -69,9 +62,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        mToolbar= (Toolbar) findViewById(R.id.tool_normal);
+        custom_back= (ImageView) findViewById(R.id.img_toolback);
+        custom_title= (TextView) findViewById(R.id.tv_tooltitle);
+        custom_menu= (ImageView) findViewById(R.id.img_toolmenu);
+    }
+
+    @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        ButterKnife.bind(this);
         x.view().inject(this);
         setupToolbar();
     }
@@ -114,7 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPause() { super.onPause();  }
 
     @Override
-    protected void onDestroy() { super.onDestroy(); ButterKnife.unbind(this); }
+    protected void onDestroy() { super.onDestroy();  }
 
     /**
      * 双击退出函数

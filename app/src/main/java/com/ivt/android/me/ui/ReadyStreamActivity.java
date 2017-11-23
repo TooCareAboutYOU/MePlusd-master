@@ -12,12 +12,8 @@ import org.xutils.view.annotation.Event;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 public class ReadyStreamActivity extends BaseActivity {
 
-    @Bind(R.id.img_slc)
     ImageView mImgSlc;
 
     ArrayList<String> pathList=new ArrayList<String>();
@@ -26,13 +22,15 @@ public class ReadyStreamActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ready_stream);
-        ButterKnife.bind(this);
-    }
+        mImgSlc= (ImageView) findViewById(R.id.img_slc);
+        findViewById(R.id.btn_selector).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(ReadyStreamActivity.this, "点击了", Toast.LENGTH_SHORT).show();
 
-    @Event(value = R.id.btn_selector, type = View.OnClickListener.class)
-    private void getPic(View v) {
-        Toast.makeText(this, "点击了", Toast.LENGTH_SHORT).show();
-    }
+            }
+        });
 
+    }
 
 }

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.ivt.android.me"
         minSdkVersion 20
@@ -56,7 +56,6 @@ dependencies {
     compile 'com.facebook.fresco:fresco:1.0.0'
     compile 'com.orhanobut:logger:1.15'
     compile 'com.android.support:design:25.1.0'
-    compile 'com.jakewharton:butterknife:7.0.1'
     compile 'de.greenrobot:greendao:2.1.0'
     compile 'com.android.support:recyclerview-v7:25.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'

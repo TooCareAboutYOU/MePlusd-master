@@ -41,7 +41,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -57,46 +56,29 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private static String TAG = "LoginActivity";
 
     /* 快捷登录 */
-    @Bind(R.id.et_qphoneNum)
     EditText mEtPhoneNum;
-    @Bind(R.id.et_phonewCode)
     EditText mEtPhonewCode;
-    @Bind(R.id.btn_pgetcode)
     Button mBtnPgetcode;
-    @Bind(R.id.btn_quickLogin)
     Button mBtnQuickLogin;
 
     /* 注册 */
-    @Bind(R.id.et_phonenum)
     EditText mEtPhonenum;
-    @Bind(R.id.et_pwd)
     EditText mEtPwd;
-    @Bind(R.id.et_code)
     EditText mEtCode;
-    @Bind(R.id.btn_getcode)
     Button mBtnGetcode;
-    @Bind(R.id.btn_accountLogin)
     Button mBtnAccountLogin;
 
     /* 账号登录 测试账号：13816765902  123456  uid: 1222679  */
     /*请求活动id http://192.168.6.172:8080/portal-clt/getAnchorActivityId.html?uid=1222679  */
-    @Bind(R.id.et_aphoneNum)
     EditText mEtAphoneNum;
-    @Bind(R.id.et_accountpwd)
     EditText mEtAccountpwd;
-    @Bind(R.id.btn_accountLogin2)
     Button mBtnAccountLogin2;
-    @Bind(R.id.btn_xGet)
     Button btn_xget;
 
     /*手机号码修改账号密码*/
-    @Bind(R.id.et_uphonenum)
     EditText et_getphone;
-    @Bind(R.id.tv_upCode)
     EditText tv_upCode;
-    @Bind(R.id.btn_upgetcode)
     Button btn_upgetcode;
-    @Bind(R.id.btn_updatepwd)
     Button btn_updatepwd;
 
 
@@ -135,6 +117,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         smsService=new SmsService(new Handler(),this);
         //注册短信变化监听
         this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, smsService);
+
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+         mEtPhoneNum= (EditText) findViewById(R.id.et_qphoneNum);
+         mEtPhonewCode= (EditText) findViewById(R.id.et_phonewCode);
+         mBtnPgetcode= (Button) findViewById(R.id.btn_pgetcode);
+         mBtnQuickLogin= (Button) findViewById(R.id.btn_quickLogin);
+
+         mEtPhonenum= (EditText) findViewById(R.id.et_phonenum);
+         mEtPwd= (EditText) findViewById(R.id.et_pwd);
+         mEtCode= (EditText) findViewById(R.id.et_code);
+         mBtnGetcode= (Button) findViewById(R.id.btn_getcode);
+         mBtnAccountLogin= (Button) findViewById(R.id.btn_accountLogin);
+
+
+         mEtAphoneNum= (EditText) findViewById(R.id.et_aphoneNum);
+         mEtAccountpwd= (EditText) findViewById(R.id.et_accountpwd);
+         mBtnAccountLogin2= (Button) findViewById(R.id.btn_accountLogin2);
+         btn_xget= (Button) findViewById(R.id.btn_xGet);
+
+         et_getphone= (EditText) findViewById(R.id.et_uphonenum);
+         tv_upCode= (EditText) findViewById(R.id.tv_upCode);
+         btn_upgetcode= (Button) findViewById(R.id.btn_upgetcode);
+         btn_updatepwd= (Button) findViewById(R.id.btn_updatepwd);
+
 
     }
 
@@ -743,10 +753,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     //下载
-    @Event(value = R.id.btn_download, type = View.OnClickListener.class)
-    private void getWay(View v){
-
-
+//    @Event(value = R.id.btn_download, type = View.OnClickListener.class)
+//    private void getWay(View v){
+//
+//
 //        final ProgressDialog progressDialog = new ProgressDialog(this);
 //        progressDialog.setMessage("加载中....");
 //        progressDialog.show();
@@ -786,18 +796,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 //                progressDialog.dismiss();
 //            }
 //        });
-    }
+//    }
 
 
 
     //删除下载的图片
-    @Event(value = R.id.btn_delete, type = View.OnClickListener.class)
-    private void deletePic(View v){
+//    @Event(value = R.id.btn_delete, type = View.OnClickListener.class)
+//    private void deletePic(View v){
 //        String path=xUtils3.IMAGE_SDCARD_MADER+xUtils3.geFileName()+"bd_logo1.png";
 //        File file_path=new File(path);
 //        file_path.delete();
 //        Toast.makeText(this, "删除图片地址：" + path, Toast.LENGTH_SHORT).show();
-    }
+//    }
 
 
     private void myDownload(View v){

@@ -15,25 +15,15 @@ import com.ivt.android.me.ui.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-
 public class AboutActivity extends BaseActivity {
 
-    @Bind(R.id.et_id)
     EditText mEtId;
-    @Bind(R.id.et_msg)
     EditText mEtMsg;
-    @Bind(R.id.et_code)
     EditText mEtCode;
-    @Bind(R.id.et_mark)
     EditText mEtMark;
-    @Bind(R.id.et_extral)
     EditText mEtExtral;
-    @Bind(R.id.btn_save)
     Button mBtnSave;
-    @Bind(R.id.btn_read)
     Button mBtnRead;
-    @Bind(R.id.tv_info)
     TextView mTvInfo;
 
     private ExAboutModel exAboutModel;
@@ -69,4 +59,17 @@ public class AboutActivity extends BaseActivity {
 
     }
 
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        mEtId= (EditText) findViewById(R.id.et_id);
+        mEtMsg= (EditText) findViewById(R.id.et_msg);
+        mEtCode= (EditText) findViewById(R.id.et_code);
+        mEtMark= (EditText) findViewById(R.id.et_mark);
+        mEtExtral= (EditText) findViewById(R.id.et_extral);
+        mBtnSave= (Button) findViewById(R.id.btn_save);
+        mBtnRead= (Button) findViewById(R.id.btn_read);
+        mTvInfo= (TextView) findViewById(R.id.tv_info);
+    }
 }
